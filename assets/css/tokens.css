@@ -1,0 +1,121 @@
+/* ==========================================================================
+   Milana PMU Dubai — design tokens
+   Single source of truth for colour, type, space and motion.
+
+   Visual language derived from Este Medical Group:
+   gold accent, near-black type, warm graphite bands, silk-grey chrome.
+   Change a value here and it propagates across every page.
+   ========================================================================== */
+
+:root {
+  /* --- Gold ------------------------------------------------------------- */
+  --gold:            #DFA615;  /* core accent: buttons, rules, logo mark    */
+  --gold-deep:       #A9760A;  /* pressed states, gradient shadow           */
+  --gold-light:      #F0C960;  /* gold text ON dark only (4.7:1 on graphite)*/
+  --gold-text:       #8A6108;  /* gold-toned text/icons ON light (5.0:1)    */
+  --gold-sheen:      #FBE9B4;  /* highlight band inside metallic gradients  */
+  --gold-veil:       rgba(223, 166, 21, .12);
+
+  /* --- Ink -------------------------------------------------------------- */
+  --ink:             #141210;  /* headings, nav                             */
+  --ink-body:        #45403B;  /* body copy on light (8.4:1 on --silk)      */
+  --ink-mute:        #6E665E;  /* captions, meta (5.0:1 on --silk)          */
+
+  /* --- Warm graphite: the dark bands ------------------------------------ */
+  --graphite:        #5C5450;  /* Este's taupe band, deepened for contrast  */
+  --graphite-deep:   #322D2A;  /* footer, hero scrim                        */
+  --graphite-ink:    #1E1A18;  /* deepest — image scrims                    */
+
+  /* --- Silk: page + chrome ---------------------------------------------- */
+  --silk:            #F4F2EF;  /* page ground                               */
+  --silk-warm:       #EDE9E3;  /* alternating section band                  */
+  --white:           #FFFFFF;
+  --line:            rgba(20, 18, 16, .12);
+  --line-strong:     rgba(20, 18, 16, .22);
+  --line-on-dark:    rgba(255, 255, 255, .18);
+
+  /* --- Skin / pigment swatches (the signature) -------------------------- */
+  /* Not decoration: these are the tone families a camouflage match works in */
+  --tone-01: #F3DCCB;  --tone-02: #EBCBB2;  --tone-03: #DFB694;
+  --tone-04: #CE9E78;  --tone-05: #B5825E;  --tone-06: #986748;
+  --tone-07: #7A4F36;  --tone-08: #5C3A28;
+
+  /* --- Semantic --------------------------------------------------------- */
+  --bg:              var(--silk);
+  --fg:              var(--ink);
+  --accent:          var(--gold);
+  --on-accent:       var(--ink);       /* black on gold — 8.5:1             */
+
+  /* --- Type ------------------------------------------------------------- */
+  --font-sans:  "Manrope", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-mono:  "JetBrains Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+
+  --fs-display: clamp(2.6rem, 1.4rem + 4.6vw, 5.5rem);
+  --fs-h1:      clamp(2.1rem, 1.3rem + 3.2vw, 3.9rem);
+  --fs-h2:      clamp(1.65rem, 1.15rem + 2vw, 2.75rem);
+  --fs-h3:      clamp(1.15rem, 1rem + .7vw, 1.5rem);
+  --fs-lead:    clamp(1.02rem, .97rem + .35vw, 1.2rem);
+  --fs-body:    1rem;
+  --fs-small:   .875rem;
+  --fs-eyebrow: .715rem;
+
+  --lh-tight:   1.04;
+  --lh-snug:    1.22;
+  --lh-body:    1.68;
+
+  --tr-display: -.025em;   /* tighten large caps                            */
+  --tr-eyebrow: .22em;     /* Este's wide letterspaced labels               */
+  --tr-caps:    .02em;
+
+  /* --- Space (density 4/10 — standard marketing rhythm) ----------------- */
+  --sp-1: .5rem;   --sp-2: .75rem;  --sp-3: 1rem;    --sp-4: 1.5rem;
+  --sp-5: 2rem;    --sp-6: 3rem;    --sp-7: 4rem;    --sp-8: 6rem;
+  --sp-9: 8rem;
+
+  --section-y: clamp(4rem, 2rem + 7vw, 8rem);
+  --container: 1240px;
+  --container-narrow: 780px;
+  --gutter: clamp(1.25rem, .5rem + 2.5vw, 2.5rem);
+
+  /* --- Radius & elevation ----------------------------------------------- */
+  --r-sm: 4px;  --r-md: 8px;  --r-lg: 14px;  --r-pill: 999px;
+
+  --sh-1: 0 1px 2px rgba(20,18,16,.05), 0 2px 8px rgba(20,18,16,.05);
+  --sh-2: 0 2px 6px rgba(20,18,16,.06), 0 12px 30px rgba(20,18,16,.09);
+  --sh-3: 0 4px 12px rgba(20,18,16,.08), 0 26px 60px rgba(20,18,16,.14);
+  --sh-gold: 0 6px 20px rgba(169,118,10,.28);
+
+  /* --- Motion ----------------------------------------------------------- */
+  --ease:      cubic-bezier(.22, .61, .36, 1);
+  --ease-out:  cubic-bezier(.16, 1, .3, 1);
+  --t-fast:    150ms;
+  --t-base:    260ms;
+  --t-slow:    620ms;
+
+  /* --- Chrome ----------------------------------------------------------- */
+  --header-h: 76px;
+  --rule-h: 4px;   /* the gold rule under the header — Este's signature     */
+}
+
+/* Metallic gold: used on rules, the logo mark and the primary button edge.  */
+:root {
+  --grad-gold: linear-gradient(
+    100deg,
+    var(--gold-deep) 0%,
+    var(--gold) 22%,
+    var(--gold-sheen) 46%,
+    var(--gold) 62%,
+    var(--gold-deep) 100%
+  );
+  /* Este's silk-grey chrome: soft diagonal light streaks across the header  */
+  --grad-silk: linear-gradient(
+    108deg,
+    #EFEDEA 0%, #FBFAF9 18%, #E9E6E1 34%, #FDFCFB 52%,
+    #EDEAE6 68%, #FAF9F7 84%, #EEEBE7 100%
+  );
+  --grad-graphite: linear-gradient(160deg, var(--graphite) 0%, var(--graphite-deep) 100%);
+}
+
+@media (max-width: 720px) {
+  :root { --header-h: 64px; }
+}
