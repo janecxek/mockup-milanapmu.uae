@@ -135,6 +135,21 @@ EN = {
        "text": "Written aftercare, a check-in during the healing week, and the touch-up booked at four to eight weeks."},
     ],
   },
+  "founder": {
+    "eyebrow": "The person at your door",
+    "h2": "Meet Milana",
+    "img_alt": "Placeholder for a portrait of Milana at work",
+    "paras": [
+      "I am a Russian permanent makeup artist working across Dubai and Sharjah. I chose to do three things properly rather than twenty adequately — brows, lips, and the camouflage work most artists turn away.",
+      "Letting someone into your home is a bigger ask than walking into a studio. So the kit is unsealed in front of you, the pigment is mixed against your skin while you watch, and nothing is tattooed until you have seen the shape in a mirror and said yes to it.",
+    ],
+    "facts": [
+      ("Speaks", "Russian & English"),
+      ("Works on", "Brows · Lips · Camouflage"),
+      ("Covers", "Dubai & Sharjah"),
+    ],
+    "cta": "How I work",
+  },
   "reviews": {
     "eyebrow": "In their words",
     "h2": "Client reviews",

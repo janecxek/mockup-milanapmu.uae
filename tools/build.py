@@ -181,8 +181,9 @@ def book_dialog(lang, C):
         primary = " book-option--primary" if i == 0 else ""
         rows.append(
             f'<a class="book-option{primary}" href="{href}"{ext}>'
-            f'<span class="book-option__ico">{ICONS[opt["icon"]]}</span>'
-            f'<span><b>{e(opt["title"])}</b><span>{e(opt["desc"])}</span></span>'
+            f'<span class="book-option__ico" data-ico="{opt["icon"]}">{ICONS[opt["icon"]]}</span>'
+            f'<span class="book-option__text"><b>{e(opt["title"])}</b>'
+            f'<span class="book-option__desc">{e(opt["desc"])}</span></span>'
             f'<span class="book-option__go">{ICONS["arrow"]}</span></a>'
         )
     return f"""<dialog class="book-dialog" id="book-dialog" aria-labelledby="book-dialog-title">
@@ -365,6 +366,11 @@ def page_index(lang, C):
         f'<div><h3>{e(s["title"])}</h3><p>{e(s["text"])}</p></div></li>'
         for s in H["home_service"]["steps"]
     )
+    founder_facts = "".join(
+        f'<div><dt class="eyebrow" style="display:block">{e(k)}</dt>'
+        f'<dd class="mono" style="margin:.4rem 0 0;font-weight:700;color:var(--ink)">{e(v)}</dd></div>'
+        for k, v in H["founder"]["facts"]
+    )
     reviews = "".join(
         f'<blockquote class="quote quote--slot reveal" data-delay="{i}">'
         f'<span class="quote__mark">{ICONS["quote"]}</span><p>{e(q["text"])}</p>'
@@ -463,6 +469,23 @@ def page_index(lang, C):
   </div>
 </section>
 
+<section class="section section--warm">
+  <div class="wrap split">
+    <div class="media-frame reveal">
+      <img src="{a}img/portrait.svg" alt="{e(H['founder']['img_alt'])}" loading="lazy" decoding="async">
+    </div>
+    <div class="reveal" data-delay="1">
+      <p class="eyebrow">{e(H['founder']['eyebrow'])}</p>
+      <h2 class="h2-caps">{e(H['founder']['h2'])}</h2>
+      {''.join(f'<p class="mt-4">{e(p)}</p>' for p in H['founder']['paras'])}
+      <dl class="spec-list mt-6">{founder_facts}</dl>
+      <div class="btn-row mt-6">
+        <a class="btn btn--ghost" href="{slug_href('about', lang, lang)}">{e(H['founder']['cta'])}</a>
+      </div>
+    </div>
+  </div>
+</section>
+
 <section class="section">
   <div class="wrap">
     <div class="head head--center reveal">
@@ -514,7 +537,7 @@ def page_services(lang, C):
       {''.join(f'<p class="mt-4">{e(p)}</p>' for p in it['paras'])}
       <h3 class="mt-6" style="font-size:1rem;letter-spacing:-.01em">{e(S['good_for_label'])}</h3>
       <ul class="mt-4" style="list-style:none;padding:0;display:grid;gap:.6rem">{good}</ul>
-      <dl class="grid grid--4 mt-6" style="margin:0">{specs}</dl>
+      <dl class="spec-list mt-6">{specs}</dl>
       <div class="btn-row mt-6">
         <a class="btn btn--gold" href="{wa_link(C)}" target="_blank" rel="noopener">{e(it['cta'])}</a>
         <a class="btn btn--ghost" href="{slug_href('pricing', lang, lang)}">{e(S['see_pricing'])}</a>

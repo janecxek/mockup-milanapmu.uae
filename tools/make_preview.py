@@ -82,7 +82,8 @@ function render() {
     const el = document.getElementById(anchor);
     if (el) { el.scrollIntoView(); return; }
   }
-  window.scrollTo(0, 0);
+  // __initSite already reset the scroll, including Lenis's own position
+
 }
 addEventListener('hashchange', render);
 

@@ -565,6 +565,7 @@ a { color: inherit; text-decoration-thickness: 1px; text-underline-offset: .22em
 }
 .dock a:hover { transform: translateY(-3px) scale(1.04); box-shadow: var(--sh-gold); }
 .dock svg { width: 24px; height: 24px; }
+.dock a:nth-child(3) svg { width: 21px; height: 21px; }
 @media (max-width: 720px) { .dock { display: none; } }
 
 .mobile-bar {
@@ -671,8 +672,14 @@ a { color: inherit; text-decoration-thickness: 1px; text-underline-offset: .22em
 .section--dark .tick::before { border-color: var(--gold); }
 .section--dark .chip, .section--dark .ico { color: var(--gold-light); }
 
-dl.grid dt.eyebrow::before { width: 18px; }
-dl.grid dd { font-size: .95rem; }
+/* Spec rows sit inside a half-width column, so they need a smaller minimum
+   than the page grids or they collapse to one item per line. */
+.spec-list {
+  display: grid; gap: var(--sp-4);
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 140px), 1fr));
+}
+.spec-list dt.eyebrow::before { width: 16px; }
+.spec-list dd { font-size: .95rem; }
 
 /* --- Narrow screens: buttons stack to equal width -------------------------*/
 @media (max-width: 520px) {
@@ -776,10 +783,15 @@ dl.grid dd { font-size: .95rem; }
   display: grid; place-items: center;
   background: var(--gold-veil); color: var(--gold-text);
 }
-.book-option__ico svg { width: 21px; height: 21px; }
+/* Sized per glyph: the WhatsApp mark is solid and the rest are line icons,
+   so equal pixel sizes would not read as equal weight. */
+.book-option__ico svg { width: 20px; height: 20px; display: block; }
+.book-option__ico[data-ico="whatsapp"] svg { width: 21px; height: 21px; }
+.book-option__ico[data-ico="phone"] svg { width: 18px; height: 18px; }
 .book-option--primary .book-option__ico { background: var(--gold); color: var(--ink); }
+.book-option__text { display: block; min-width: 0; }
 .book-option b { display: block; color: var(--ink); font-size: .97rem; }
-.book-option span { display: block; font-size: .82rem; color: var(--ink-mute); margin-top: .1rem; }
+.book-option__desc { display: block; font-size: .82rem; color: var(--ink-mute); margin-top: .1rem; }
 .book-option__go { width: 16px; height: 16px; color: var(--ink-mute); transition: transform var(--t-base) var(--ease); }
 .book-option:hover .book-option__go { transform: translateX(4px); }
 .book-dialog__note {

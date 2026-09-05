@@ -84,6 +84,7 @@ i to jedyna rzecz, której konkurencja nie ma.
 | Linki kotwiczne | `lenis.scrollTo(el, { offset })`, offset liczony z realnej wysokości headera | `window.scrollTo({ behavior: "smooth" })` |
 | Przejścia między stronami | treść `<main>` gaśnie i unosi się, `#veil` zakrywa całość (320 ms), po wczytaniu treść wraca z dołu (460 ms). Header i stopka nie ruszają się — przejście czyta się jak jedna strona, która się zmienia | link nawiguje natychmiast |
 | Zmiana języka | to samo, ale `#veil` w trybie `--loading`: rozmycie tła, znak firmowy i pasek postępu, ~680 ms | jak wyżej |
+| Pozycja po nawigacji | każda zmiana podstrony startuje od góry — `history.scrollRestoration = 'manual'` plus reset pozycji Lenisa (`immediate`), bo inaczej Lenis przywraca poprzedni scroll w następnej klatce | `window.scrollTo(0, 0)` |
 | Popup „Book" | natywny `<dialog>` — pułapka focusa, Esc i `::backdrop` z pudełka | przycisk to prawdziwy link do WhatsApp i tak działa |
 | FAQ | animacja wysokości przez Web Animations API, `<details>` zostaje źródłem prawdy | natywne rozwijanie bez animacji |
 
@@ -128,6 +129,7 @@ sekcyjnych, 2400 px dla hero.
 - [ ] **Kwota depozytu** — treść mówi, że depozyt potwierdza termin, ale nie podaje kwoty
 - [ ] **Czasy trwania i trwałość** — wpisane wartości branżowe (2,5–3 h, 1–2 lata itd.),
       Milana powinna je potwierdzić
+- [ ] **Języki** — sekcja „Meet Milana" mówi „Russian & English"; do potwierdzenia
 - [ ] **Doświadczenie / szkolenia / certyfikaty** — świadomie nie wymyślone; strona
       „O mnie" jest napisana bez tych danych i zyska na ich dodaniu
 - [ ] **Opinie klientek** — trzy miejsca na stronie głównej mają widoczne

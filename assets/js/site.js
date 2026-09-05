@@ -54,6 +54,15 @@
     return -((header ? header.offsetHeight : 80) + 8);
   }
 
+  /* Every navigation starts at the top. The browser's own restoration puts
+     you back where you left the previous page, which is wrong when the page
+     itself has changed — and Lenis would otherwise re-apply its last position
+     on the next frame and undo a plain window.scrollTo. */
+  function scrollTop() {
+    window.scrollTo(0, 0);
+    if (lenis) lenis.scrollTo(0, { immediate: true, force: true });
+  }
+
   function scrollToEl(el) {
     if (lenis) { lenis.scrollTo(el, { offset: headerOffset() }); return; }
     var y = el.getBoundingClientRect().top + window.scrollY + headerOffset();
@@ -300,8 +309,10 @@
 
   /* --- One-time global setup --------------------------------------------- */
   function boot() {
-    if (window.__pmuBooted) { wire(); clearEntry(); return; }
+    if (window.__pmuBooted) { wire(); scrollTop(); clearEntry(); return; }
     window.__pmuBooted = true;
+
+    if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
 
     lenis = initLenis();
     if (lenis) {
@@ -390,9 +401,12 @@
     if (location.hash.length > 1) {
       var target = document.getElementById(location.hash.slice(1));
       if (target) window.setTimeout(function () { scrollToEl(target); }, 60);
+    } else {
+      scrollTop();
     }
   }
 
+  window.__pmuScrollTop = scrollTop;
   window.__initSite = boot;
   boot();
 })();
