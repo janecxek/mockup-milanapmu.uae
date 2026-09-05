@@ -978,13 +978,13 @@ dl.grid dd { font-size: .95rem; }
 .veil {
   position: fixed; inset: 0; z-index: 300;
   display: grid; place-items: center; gap: var(--sp-4);
-  background: rgba(244, 242, 239, .72);
+  background: var(--silk);            /* opaque: the swap happens unseen */
   opacity: 0; visibility: hidden;
-  transition: opacity 240ms var(--ease), visibility 0s linear 240ms;
+  transition: opacity 380ms var(--ease-out), visibility 0s linear 380ms;
 }
 .veil.is-on {
   opacity: 1; visibility: visible;
-  transition: opacity 240ms var(--ease), visibility 0s;
+  transition: opacity 300ms var(--ease), visibility 0s;
 }
 .veil--loading {
   background: rgba(244, 242, 239, .86);
@@ -1010,7 +1010,7 @@ dl.grid dd { font-size: .95rem; }
 .veil--loading .veil__bar i { animation: veil-fill 620ms var(--ease-out) forwards; }
 @keyframes veil-fill { from { width: 0 } to { width: 100% } }
 @media (prefers-reduced-motion: reduce) {
-  .veil, .veil__inner { transition-duration: 1ms; }
+  .veil, .veil__inner, .js .page { transition-duration: 1ms; }
   .veil__mark { animation: none; }
   .veil--loading .veil__bar i { animation-duration: 1ms; }
 }
@@ -1084,6 +1084,12 @@ dl.grid dd { font-size: .95rem; }
    The head script stamps <html> before first paint, so an incoming page is
    already covered by the veil and never flashes its unstyled arrival.       */
 html.is-entering .veil { opacity: 1; visibility: visible; }
+/* Chrome holds still, content arrives. The header and footer are identical
+   across pages, so animating only <main> makes the swap read as one page
+   changing rather than two pages replacing each other. */
+.js .page { transition: opacity 460ms var(--ease-out), transform 460ms var(--ease-out); }
+html.is-entering .page { opacity: 0; transform: translateY(12px); }
+.js .page.is-leaving { opacity: 0; transform: translateY(-10px); transition-duration: 300ms; }
 html.is-entering-lang .veil {
   background: rgba(244, 242, 239, .86);
   -webkit-backdrop-filter: blur(22px) saturate(.9);
@@ -1183,12 +1189,23 @@ window.__initSite = function () {
      which gets the blur, the mark and the progress bar.                     */
   function leaveTo(url, mode) {
     var veil = document.getElementById('veil');
+    var page = document.querySelector('.page');
     try { sessionStorage.setItem('pmu-enter', mode); } catch (e) {}
     if (!veil || reduceMotion) { window.location.href = url; return; }
+
     veil.classList.add('is-on');
+    if (page) page.classList.add('is-leaving');
     if (mode === 'lang') veil.classList.add('veil--loading');
-    window.setTimeout(function () { window.location.href = url; },
-                      mode === 'lang' ? 680 : 200);
+
+    /* Long enough for the veil to reach full opacity, so the swap itself is
+       never visible. */
+    var wait = mode === 'lang' ? 680 : 320;
+    window.setTimeout(function () {
+      /* If the next page is slow to arrive we are still here — turn the plain
+         cover into a real loading state rather than an empty screen. */
+      window.setTimeout(function () { veil.classList.add('veil--loading'); }, 500);
+      window.location.href = url;
+    }, wait);
   }
 
   function isPlainLeftClick(e) {
@@ -1509,8 +1526,9 @@ function render() {
 }
 addEventListener('hashchange', render);
 
-// Route changes are hash changes here, not page loads, so the veil that the
-// real site gets from its entry stamp is driven by hand.
+// Route changes are hash changes here, not page loads, so the entry stamp the
+// real site gets from its head script is applied by hand. From there the same
+// CSS and the same clearEntry() in site.js drive the transition.
 document.addEventListener('click', function (e) {
   const a = e.target.closest && e.target.closest('a[href^="#/"]');
   if (!a || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey) return;
@@ -1518,20 +1536,19 @@ document.addEventListener('click', function (e) {
   const target = a.getAttribute('href');
   if (target === location.hash) return;
   const veil = document.getElementById('veil');
+  const page = document.querySelector('.page');
   const lang = a.hasAttribute('data-lang');
   const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
   if (!veil || reduce) { location.hash = target; return; }
   veil.classList.add('is-on');
+  if (page) page.classList.add('is-leaving');
   if (lang) veil.classList.add('veil--loading');
   setTimeout(function () {
+    const h = document.documentElement;
+    h.classList.add('is-entering');
+    if (lang) h.classList.add('is-entering-lang');
     location.hash = target;
-    const fresh = document.getElementById('veil');
-    if (!fresh) return;
-    fresh.classList.add('is-on');
-    if (lang) fresh.classList.add('veil--loading');
-    setTimeout(function () { fresh.classList.remove('is-on', 'veil--loading'); },
-               lang ? 260 : 40);
-  }, lang ? 680 : 200);
+  }, lang ? 680 : 320);
 }, true);
 
 render();

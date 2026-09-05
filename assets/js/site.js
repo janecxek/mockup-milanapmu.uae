@@ -78,12 +78,23 @@
      which gets the blur, the mark and the progress bar.                     */
   function leaveTo(url, mode) {
     var veil = document.getElementById('veil');
+    var page = document.querySelector('.page');
     try { sessionStorage.setItem('pmu-enter', mode); } catch (e) {}
     if (!veil || reduceMotion) { window.location.href = url; return; }
+
     veil.classList.add('is-on');
+    if (page) page.classList.add('is-leaving');
     if (mode === 'lang') veil.classList.add('veil--loading');
-    window.setTimeout(function () { window.location.href = url; },
-                      mode === 'lang' ? 680 : 200);
+
+    /* Long enough for the veil to reach full opacity, so the swap itself is
+       never visible. */
+    var wait = mode === 'lang' ? 680 : 320;
+    window.setTimeout(function () {
+      /* If the next page is slow to arrive we are still here — turn the plain
+         cover into a real loading state rather than an empty screen. */
+      window.setTimeout(function () { veil.classList.add('veil--loading'); }, 500);
+      window.location.href = url;
+    }, wait);
   }
 
   function isPlainLeftClick(e) {

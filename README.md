@@ -82,10 +82,13 @@ i to jedyna rzecz, której konkurencja nie ma.
 |---|---|---|
 | Ciężki smooth scroll | [Lenis](https://lenis.darkroom.engineering/) z CDN, `lerp: 0.085`, pętla `requestAnimationFrame` | brak Lenisa (`typeof Lenis === "undefined"`) → natywne przewijanie, strona działa normalnie |
 | Linki kotwiczne | `lenis.scrollTo(el, { offset })`, offset liczony z realnej wysokości headera | `window.scrollTo({ behavior: "smooth" })` |
-| Przejścia między stronami | krótkie przenikanie przez `#veil`, ~200 ms w obie strony | link nawiguje natychmiast |
-| Zmiana języka | `#veil` w trybie `--loading`: rozmycie tła, znak firmowy i pasek postępu, ~680 ms | jak wyżej |
+| Przejścia między stronami | treść `<main>` gaśnie i unosi się, `#veil` zakrywa całość (320 ms), po wczytaniu treść wraca z dołu (460 ms). Header i stopka nie ruszają się — przejście czyta się jak jedna strona, która się zmienia | link nawiguje natychmiast |
+| Zmiana języka | to samo, ale `#veil` w trybie `--loading`: rozmycie tła, znak firmowy i pasek postępu, ~680 ms | jak wyżej |
 | Popup „Book" | natywny `<dialog>` — pułapka focusa, Esc i `::backdrop` z pudełka | przycisk to prawdziwy link do WhatsApp i tak działa |
 | FAQ | animacja wysokości przez Web Animations API, `<details>` zostaje źródłem prawdy | natywne rozwijanie bez animacji |
+
+Jeśli nowa strona wczytuje się dłużej niż 500 ms, zwykła zasłona sama zamienia się
+w tryb `--loading` — zamiast pustego ekranu widać znak firmowy i pasek.
 
 Przy otwartym menu mobilnym i przy otwartym popupie leci `lenis.stop()`, przy zamknięciu
 `lenis.start()`; bez Lenisa blokadę przejmuje klasa `is-locked` na `<html>`.

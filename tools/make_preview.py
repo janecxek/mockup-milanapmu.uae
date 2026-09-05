@@ -86,8 +86,9 @@ function render() {
 }
 addEventListener('hashchange', render);
 
-// Route changes are hash changes here, not page loads, so the veil that the
-// real site gets from its entry stamp is driven by hand.
+// Route changes are hash changes here, not page loads, so the entry stamp the
+// real site gets from its head script is applied by hand. From there the same
+// CSS and the same clearEntry() in site.js drive the transition.
 document.addEventListener('click', function (e) {
   const a = e.target.closest && e.target.closest('a[href^="#/"]');
   if (!a || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey) return;
@@ -95,20 +96,19 @@ document.addEventListener('click', function (e) {
   const target = a.getAttribute('href');
   if (target === location.hash) return;
   const veil = document.getElementById('veil');
+  const page = document.querySelector('.page');
   const lang = a.hasAttribute('data-lang');
   const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
   if (!veil || reduce) { location.hash = target; return; }
   veil.classList.add('is-on');
+  if (page) page.classList.add('is-leaving');
   if (lang) veil.classList.add('veil--loading');
   setTimeout(function () {
+    const h = document.documentElement;
+    h.classList.add('is-entering');
+    if (lang) h.classList.add('is-entering-lang');
     location.hash = target;
-    const fresh = document.getElementById('veil');
-    if (!fresh) return;
-    fresh.classList.add('is-on');
-    if (lang) fresh.classList.add('veil--loading');
-    setTimeout(function () { fresh.classList.remove('is-on', 'veil--loading'); },
-               lang ? 260 : 40);
-  }, lang ? 680 : 200);
+  }, lang ? 680 : 320);
 }, true);
 
 render();
