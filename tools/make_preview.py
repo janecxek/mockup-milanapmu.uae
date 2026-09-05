@@ -49,7 +49,9 @@ for lang in ("en", "ru"):
     for page in PAGES:
         src = read(("" if lang == "en" else "ru/") + ("index.html" if page == "index" else page + ".html"))
         body = re.search(r"<body>(.*)</body>", src, re.S).group(1)
-        body = re.sub(r'<script src="[^"]*site\.js"[^>]*></script>', "", body)
+        # Every <script src> comes out: injected via innerHTML they would not
+        # run anyway, and their "</script>" would close the router's own block.
+        body = re.sub(r'<script src="[^"]*"[^>]*></script>', "", body)
         other = "ru" if lang == "en" else "en"
 
         def href(m):
@@ -83,8 +85,34 @@ function render() {
   window.scrollTo(0, 0);
 }
 addEventListener('hashchange', render);
+
+// Route changes are hash changes here, not page loads, so the veil that the
+// real site gets from its entry stamp is driven by hand.
+document.addEventListener('click', function (e) {
+  const a = e.target.closest && e.target.closest('a[href^="#/"]');
+  if (!a || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey) return;
+  e.preventDefault();
+  const target = a.getAttribute('href');
+  if (target === location.hash) return;
+  const veil = document.getElementById('veil');
+  const lang = a.hasAttribute('data-lang');
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (!veil || reduce) { location.hash = target; return; }
+  veil.classList.add('is-on');
+  if (lang) veil.classList.add('veil--loading');
+  setTimeout(function () {
+    location.hash = target;
+    const fresh = document.getElementById('veil');
+    if (!fresh) return;
+    fresh.classList.add('is-on');
+    if (lang) fresh.classList.add('veil--loading');
+    setTimeout(function () { fresh.classList.remove('is-on', 'veil--loading'); },
+               lang ? 260 : 40);
+  }, lang ? 680 : 200);
+}, true);
+
 render();
-""" % json.dumps(bodies, ensure_ascii=False)
+""" % json.dumps(bodies, ensure_ascii=False).replace("</", "<\\/")
 
 html = """<title>Milana PMU Dubai</title>
 <style>%s
@@ -94,6 +122,7 @@ html = """<title>Milana PMU Dubai</title>
  pointer-events:none}
 @media (max-width:720px){.preview-note{bottom:64px}}
 </style>
+<script src="https://cdn.jsdelivr.net/npm/lenis@1/dist/lenis.min.js"></script>
 <div id="app"></div>
 <div class="preview-note">Podgląd — jeden plik, obie wersje językowe</div>
 <script>document.documentElement.classList.add('js')</script>

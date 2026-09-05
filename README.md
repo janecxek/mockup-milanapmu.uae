@@ -76,6 +76,27 @@ przy wersalikach w parach typu „TS" (ROZDZIELA słowa RESULTS i WHATSAPP).
 głównej. To nie ozdobnik — dobór pigmentu pod podton to faktyczne rzemiosło w kamuflażu blizn
 i to jedyna rzecz, której konkurencja nie ma.
 
+## Interakcje
+
+| Zachowanie | Jak działa | Gdy się nie uda |
+|---|---|---|
+| Ciężki smooth scroll | [Lenis](https://lenis.darkroom.engineering/) z CDN, `lerp: 0.085`, pętla `requestAnimationFrame` | brak Lenisa (`typeof Lenis === "undefined"`) → natywne przewijanie, strona działa normalnie |
+| Linki kotwiczne | `lenis.scrollTo(el, { offset })`, offset liczony z realnej wysokości headera | `window.scrollTo({ behavior: "smooth" })` |
+| Przejścia między stronami | krótkie przenikanie przez `#veil`, ~200 ms w obie strony | link nawiguje natychmiast |
+| Zmiana języka | `#veil` w trybie `--loading`: rozmycie tła, znak firmowy i pasek postępu, ~680 ms | jak wyżej |
+| Popup „Book" | natywny `<dialog>` — pułapka focusa, Esc i `::backdrop` z pudełka | przycisk to prawdziwy link do WhatsApp i tak działa |
+| FAQ | animacja wysokości przez Web Animations API, `<details>` zostaje źródłem prawdy | natywne rozwijanie bez animacji |
+
+Przy otwartym menu mobilnym i przy otwartym popupie leci `lenis.stop()`, przy zamknięciu
+`lenis.start()`; bez Lenisa blokadę przejmuje klasa `is-locked` na `<html>`.
+
+**`prefers-reduced-motion`**: Lenis w ogóle się nie inicjalizuje, przejścia i animacja FAQ
+są pomijane, nawigacja jest natychmiastowa.
+
+**Uwaga o CDN:** Lenis to jedyny zewnętrzny zasób na stronie (fonty są lokalne).
+Bez internetu strona nadal działa — po prostu przewija się natywnie. Jeśli wolisz zero
+zależności zewnętrznych, wgraj `lenis.min.js` do `assets/js/` i podmień `src` w `tools/build.py`.
+
 ## Zdjęcia
 
 W `assets/img/` są placeholdery (miękkie gradienty w palecie marki, z dyskretną
@@ -126,4 +147,5 @@ Po ustawieniu domeny podmień `SITE["domain"]` i przebuduj — inaczej `canonica
 - `prefers-reduced-motion` respektowane
 - Poprawna hierarchia nagłówków, `alt` na każdej grafice, `lang` i `hreflang`
 - Bez poziomego scrolla od 320 px w górę
-- Strona działa bez JS (animacje wejścia są warunkowane klasą `.js`)
+- Strona działa bez JS: animacje są warunkowane klasą `.js`, „Book" pozostaje linkiem do
+  WhatsApp, FAQ rozwija się natywnie, a nakładka przejścia nigdy się nie pokazuje

@@ -416,4 +416,16 @@ EN = {
           "primary": "Message on WhatsApp", "secondary": "Contact details"},
 },
 
+"book": {
+  "h2": "Book a session",
+  "lead": "Pick whichever suits you. Send a daylight photo of the area and you get an honest read before anything is booked.",
+  "close": "Close",
+  "note": "For camouflage, include the age of the scar and a photo taken in daylight — indoor lighting hides undertone completely.",
+  "options": [
+    {"icon": "whatsapp", "title": "WhatsApp", "desc": "Fastest — usually a reply within a few hours"},
+    {"icon": "instagram", "title": "Instagram DM", "desc": "__IG_HANDLE__ — recent work and healed results"},
+    {"icon": "phone", "title": "Call", "desc": "__PHONE__"},
+    {"icon": "form", "title": "Booking form", "desc": "Send your details in one go"},
+  ],
+},
 }

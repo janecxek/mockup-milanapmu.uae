@@ -46,6 +46,8 @@ ICONS = {
     "shield": '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2.6 4.5 5.7v5.6c0 4.7 3.2 8.4 7.5 10.1 4.3-1.7 7.5-5.4 7.5-10.1V5.7z"/><path d="m9 12 2.2 2.2L15.5 10"/></svg>',
     "home": '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3.5 10.5 12 3.5l8.5 7"/><path d="M5.5 9.6V20h13V9.6"/><path d="M10 20v-5.5h4V20"/></svg>',
     "drop": '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3s5.5 6.1 5.5 9.8A5.5 5.5 0 0 1 12 18.3a5.5 5.5 0 0 1-5.5-5.5C6.5 9.1 12 3 12 3z"/></svg>',
+    "close": '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18"/></svg>',
+    "form": '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="3" width="16" height="18" rx="2.5"/><path d="M8.5 8.5h7M8.5 12.5h7M8.5 16.5h4"/></svg>',
     "quote": '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M9.4 5.6C6.3 7 4.4 9.7 4.4 13v5.4h6.4V13H7.6c0-2.3 1-3.9 3-4.9zM20.4 5.6C17.3 7 15.4 9.7 15.4 13v5.4h6.4V13h-3.2c0-2.3 1-3.9 3-4.9z"/></svg>',
     "mark": '<svg viewBox="0 0 40 40" fill="none" aria-hidden="true"><circle cx="20" cy="20" r="17" stroke="var(--gold)" stroke-width="3.4" stroke-linecap="round" stroke-dasharray="80 27" transform="rotate(-28 20 20)"/><path d="M20 12.5v15M12.5 20h15" stroke="var(--gold)" stroke-width="3.4" stroke-linecap="round"/></svg>',
 }
@@ -84,7 +86,7 @@ def head(lang, page, C):
 <meta property="og:title" content="{e(meta['title'])}">
 <meta property="og:description" content="{e(meta['desc'])}">
 <meta property="og:locale" content="{'en_AE' if lang == 'en' else 'ru_RU'}">
-<script>document.documentElement.classList.add('js')</script>
+<script>(function(d){{var h=d.documentElement;h.classList.add('js');try{{var m=sessionStorage.getItem('pmu-enter');if(m){{sessionStorage.removeItem('pmu-enter');h.classList.add('is-entering');if(m==='lang')h.classList.add('is-entering-lang');}}}}catch(e){{}}}})(document)</script>
 <link rel="stylesheet" href="{asset}css/fonts.css">
 <link rel="stylesheet" href="{asset}css/tokens.css">
 <link rel="stylesheet" href="{asset}css/site.css">
@@ -92,6 +94,16 @@ def head(lang, page, C):
 </head>
 <body>
 <a class="skip-link" href="#main">{e(C['ui']['skip'])}</a>
+<div class="veil" id="veil" aria-hidden="true">
+  <div class="veil__inner">
+    <span class="veil__mark">{ICONS['mark']}</span>
+    <span class="veil__brand">
+      <span class="brand__name" style="font-size:1.5rem">{e(SITE['brand'])}</span>
+      <span class="brand__sub">{e(SITE['brand_sub'])}</span>
+    </span>
+    <span class="veil__bar"><i></i></span>
+  </div>
+</div>
 """
 
 
@@ -106,13 +118,14 @@ def header(lang, page, C):
 
     lang_switch = (
         f'<div class="lang" role="group" aria-label="{e(C["ui"]["language"])}">'
-        f'<a href="{slug_href(page, "en", lang)}" aria-current="{"true" if lang == "en" else "false"}" lang="en">EN</a>'
-        f'<a href="{slug_href(page, "ru", lang)}" aria-current="{"true" if lang == "ru" else "false"}" lang="ru">RU</a>'
+        f'<a href="{slug_href(page, "en", lang)}" data-lang aria-current="{"true" if lang == "en" else "false"}" lang="en">EN</a>'
+        f'<a href="{slug_href(page, "ru", lang)}" data-lang aria-current="{"true" if lang == "ru" else "false"}" lang="ru">RU</a>'
         f"</div>"
     )
     return f"""<header class="header">
   <div class="header__inner">
-    <nav class="nav" aria-label="{e(C['ui']['nav_primary'])}">
+    <nav class="nav nav--start" aria-label="{e(C['ui']['nav_primary'])}">
+      <a class="nav__tel" href="tel:{SITE['phone_e164']}">{ICONS['phone']}<span>{e(SITE['phone_display'])}</span></a>
       {''.join(link(p) for p in left)}
     </nav>
     <a class="brand" href="{slug_href('index', lang, lang)}">
@@ -122,7 +135,7 @@ def header(lang, page, C):
     <nav class="nav nav--end" aria-label="{e(C['ui']['nav_secondary'])}">
       {''.join(link(p) for p in right)}
       {lang_switch}
-      <a class="btn btn--gold" href="{wa_link(C)}" target="_blank" rel="noopener">{e(C['ui']['book'])}</a>
+      <a class="btn btn--gold" href="{wa_link(C)}" data-book aria-haspopup="dialog" aria-controls="book-dialog" target="_blank" rel="noopener">{e(C['ui']['book'])}</a>
     </nav>
     <button class="burger" type="button" aria-expanded="false" aria-label="{e(C['ui']['menu'])}"><span></span></button>
   </div>
@@ -145,6 +158,42 @@ def dock(C):
   <a class="is-primary" href="{wa_link(C)}" target="_blank" rel="noopener">{ICONS['whatsapp']}WhatsApp</a>
   <a href="{SITE['instagram']}" target="_blank" rel="noopener">{ICONS['instagram']}Instagram</a>
 </nav>
+"""
+
+
+def book_dialog(lang, C):
+    """Booking options, one dialog per page.
+
+    The trigger stays a real WhatsApp link, so with no JS or no <dialog>
+    support the button still does the thing it promises.
+    """
+    B = C["book"]
+    hrefs = {
+        "whatsapp": (wa_link(C), True),
+        "instagram": (SITE["instagram"], True),
+        "phone": ("tel:" + SITE["phone_e164"], False),
+        "form": (slug_href("contact", lang, lang), False),
+    }
+    rows = []
+    for i, opt in enumerate(B["options"]):
+        href, external = hrefs[opt["icon"]]
+        ext = ' target="_blank" rel="noopener"' if external else ""
+        primary = " book-option--primary" if i == 0 else ""
+        rows.append(
+            f'<a class="book-option{primary}" href="{href}"{ext}>'
+            f'<span class="book-option__ico">{ICONS[opt["icon"]]}</span>'
+            f'<span><b>{e(opt["title"])}</b><span>{e(opt["desc"])}</span></span>'
+            f'<span class="book-option__go">{ICONS["arrow"]}</span></a>'
+        )
+    return f"""<dialog class="book-dialog" id="book-dialog" aria-labelledby="book-dialog-title">
+  <div class="book-dialog__head">
+    <h2 id="book-dialog-title">{e(B['h2'])}</h2>
+    <p>{e(B['lead'])}</p>
+    <button class="book-dialog__close" type="button" data-close aria-label="{e(B['close'])}">{ICONS['close']}</button>
+  </div>
+  <div class="book-options">{''.join(rows)}</div>
+  <p class="book-dialog__note">{e(B['note'])}</p>
+</dialog>
 """
 
 
@@ -190,6 +239,7 @@ def footer(lang, C):
     </div>
   </div>
 </footer>
+<script src="https://cdn.jsdelivr.net/npm/lenis@1/dist/lenis.min.js" defer></script>
 <script src="{asset_js}" defer></script>
 </body>
 </html>
@@ -616,7 +666,7 @@ def page_about(lang, C):
     <div class="reveal" data-delay="1">
       {''.join(f'<p class="mt-4">{e(p)}</p>' for p in A['paras'])}
       <p class="mt-6" style="font-size:.9rem;color:var(--ink-mute)">{e(A['founder_label'])}
-        <a href="{SITE['founder']}" target="_blank" rel="noopener" style="font-weight:700;color:var(--ink)">{e(SITE['founder_handle'])}</a></p>
+        <a href="{SITE['founder']}" target="_blank" rel="noopener" class="channel-link" style="font-weight:700;color:var(--ink)">{e(SITE['founder_handle'])}</a></p>
     </div>
   </div>
 </section>
@@ -782,6 +832,9 @@ def resolve_channels(C):
     for ch in C["contact"]["channels"]:
         for key in ("value", "href"):
             ch[key] = repl.get(ch[key], ch[key])
+    for opt in C["book"]["options"]:
+        for token, value in repl.items():
+            opt["desc"] = opt["desc"].replace(token, value)
 
 
 def main():
@@ -797,7 +850,7 @@ def main():
         outdir.mkdir(parents=True, exist_ok=True)
         for page in PAGES:
             doc = head(lang, page, C) + header(lang, page, C) \
-                + RENDERERS[page](lang, C) + dock(C) + footer(lang, C)
+                + RENDERERS[page](lang, C) + dock(C) + book_dialog(lang, C) + footer(lang, C)
             doc = re.sub(r"\n{3,}", "\n\n", doc)
             path = outdir / ("index.html" if page == "index" else page + ".html")
             path.write_text(doc, encoding="utf-8")
