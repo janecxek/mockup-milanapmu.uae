@@ -248,21 +248,61 @@ a { color: inherit; text-decoration-thickness: 1px; text-underline-offset: .22em
 @media (max-width: 1080px) {
   /* Explicit placement: brand and burger stay pinned to row 1 while the
      drawer's two nav groups stack underneath. */
-  .header__inner { grid-template-columns: 1fr auto; align-items: center; }
+  .header__inner { grid-template-columns: 1fr auto; align-items: center; row-gap: 0; }
   .brand { align-items: flex-start; grid-column: 1; grid-row: 1; }
   .burger { display: inline-flex; grid-column: 2; grid-row: 1; justify-self: end; }
-  .nav { display: none; grid-column: 1 / -1; }
+  .nav { grid-column: 1 / -1; }
   .nav__tel { display: none; }
 
-  .drawer-open .nav {
+  /* The drawer stays in the DOM and collapses to nothing, so it can animate.
+     JS sets --drawer-h to the measured content height: transitioning to an
+     approximate max-height makes the panel appear to snap open early. */
+  .nav {
     display: flex; flex-direction: column; align-items: stretch; gap: 0;
-    padding-block: var(--sp-2); border-top: 1px solid var(--line);
+    max-height: 0; overflow: hidden; opacity: 0; visibility: hidden;
+    transition: max-height 340ms var(--ease), opacity 160ms var(--ease),
+                visibility 0s linear 340ms;
   }
-  .drawer-open .nav__link { padding: .95rem 0; font-size: 1.05rem; border-bottom: 1px solid var(--line); }
-  .drawer-open .nav__link::after { display: none; }
-  .drawer-open .nav--end { padding-bottom: var(--sp-4); }
-  .drawer-open .nav .btn { margin-top: var(--sp-3); }
-  .drawer-open .lang { margin: var(--sp-3) 0 0; align-self: flex-start; }
+  .drawer-open .nav {
+    max-height: var(--nav-h, 70vh); opacity: 1; visibility: visible;
+    transition: max-height 420ms var(--ease-out), opacity 200ms var(--ease),
+                visibility 0s;
+  }
+  /* No padding between the two groups: Services…Pricing and About…Contact
+     read as one list rather than two blocks with a gap down the middle. */
+  .nav--start { padding: 0; }
+  /* Only while open — otherwise a collapsed panel still leaves a 1px line
+     sitting under the header. */
+  .drawer-open .nav--start { border-top: 1px solid var(--line); }
+  .nav--end { padding: 0 0 var(--sp-4); }
+
+  .nav__link {
+    padding: .95rem 0; font-size: 1.05rem; border-bottom: 1px solid var(--line);
+    opacity: 0; transform: translateY(-10px);
+    transition: opacity 240ms var(--ease-out), transform 300ms var(--ease-out);
+  }
+  .nav__link::after { display: none; }
+  .nav .lang, .nav .btn {
+    opacity: 0; transform: translateY(-10px);
+    transition: opacity 240ms var(--ease-out), transform 300ms var(--ease-out);
+  }
+  .drawer-open .nav__link,
+  .drawer-open .nav .lang,
+  .drawer-open .nav .btn { opacity: 1; transform: none; }
+
+  /* The list unrolls top to bottom instead of arriving all at once. */
+  .drawer-open .nav--start .nav__link:nth-child(2) { transition-delay: 40ms; }
+  .drawer-open .nav--start .nav__link:nth-child(3) { transition-delay: 80ms; }
+  .drawer-open .nav--start .nav__link:nth-child(4) { transition-delay: 120ms; }
+  .drawer-open .nav--end .nav__link:nth-child(1) { transition-delay: 160ms; }
+  .drawer-open .nav--end .nav__link:nth-child(2) { transition-delay: 200ms; }
+  .drawer-open .nav--end .nav__link:nth-child(3) { transition-delay: 240ms; }
+  .drawer-open .nav .lang { transition-delay: 280ms; }
+  .drawer-open .nav .btn { transition-delay: 320ms; }
+
+  .nav .btn { margin-top: var(--sp-3); }
+  .nav .lang { margin: var(--sp-3) 0 0; align-self: flex-start; }
+  .drawer-open .header { box-shadow: 0 18px 40px rgba(20, 18, 16, .16); }
   .drawer-open .header__inner { max-height: calc(100dvh - var(--rule-h)); overflow-y: auto; }
 }
 
@@ -405,6 +445,27 @@ a { color: inherit; text-decoration-thickness: 1px; text-underline-offset: .22em
 .tone[aria-pressed="true"]::after {
   content: ""; position: absolute; inset: -8px; border: 1px solid var(--gold-light);
   border-radius: calc(var(--r-md) + 6px);
+}
+
+/* Eight swatches never fit as separate 60px tiles on a phone — the darkest
+   dropped to a line of its own. Below 620px they become one continuous ramp
+   that fills the width, which reads as a deliberate colour scale and keeps
+   each target well above 24px. */
+@media (max-width: 620px) {
+  .tones {
+    display: grid; grid-template-columns: repeat(8, 1fr); gap: 0;
+    border-radius: var(--r-md); overflow: hidden;
+    box-shadow: inset 0 0 0 1px var(--line-on-dark);
+  }
+  .tone {
+    width: auto; height: 64px; border-radius: 0; border: 0; box-shadow: none;
+  }
+  .tone:hover { transform: none; }
+  .tone[aria-pressed="true"] {
+    transform: none; z-index: 1;
+    box-shadow: inset 0 0 0 3px var(--gold), inset 0 0 0 5px rgba(20, 18, 16, .3);
+  }
+  .tone[aria-pressed="true"]::after { display: none; }
 }
 
 .match-card {
@@ -636,6 +697,48 @@ a { color: inherit; text-decoration-thickness: 1px; text-underline-offset: .22em
 .quote--slot { border-style: dashed; border-color: var(--line-strong); background: transparent; }
 .quote--slot p { color: var(--ink-mute); font-style: italic; }
 
+/* --- Reviews: three columns, one swipeable track on a phone ---------------*/
+.reviews {
+  display: grid; gap: var(--sp-4);
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr));
+}
+.reviews__dots { display: none; }
+
+@media (max-width: 720px) {
+  /* Native scroll-snap rather than a JS carousel: momentum, rubber-banding
+     and accessibility all come from the platform. The negative margin lets
+     cards bleed to the screen edge while staying aligned to the gutter. */
+  .reviews {
+    display: flex; gap: var(--sp-3);
+    overflow-x: auto; overscroll-behavior-x: contain;
+    scroll-snap-type: x mandatory;
+    margin-inline: calc(var(--gutter) * -1);
+    padding-inline: var(--gutter);
+    scroll-padding-inline: var(--gutter);
+    scrollbar-width: none; -webkit-overflow-scrolling: touch;
+  }
+  .reviews::-webkit-scrollbar { display: none; }
+  .reviews > .quote { flex: 0 0 86%; scroll-snap-align: start; }
+
+  .reviews__dots {
+    display: flex; justify-content: center; gap: .1rem; margin-top: var(--sp-3);
+  }
+  /* 24px target around an 8px dot. */
+  .reviews__dots button {
+    width: 26px; height: 26px; padding: 0; border: 0; background: none;
+    cursor: pointer; display: grid; place-items: center;
+  }
+  .reviews__dots button::before {
+    content: ""; width: 7px; height: 7px; border-radius: 50%;
+    background: var(--line-strong);
+    transition: background-color var(--t-base) var(--ease),
+                transform var(--t-base) var(--ease);
+  }
+  .reviews__dots button[aria-current="true"]::before {
+    background: var(--gold-deep); transform: scale(1.5);
+  }
+}
+
 /* --- Forms ---------------------------------------------------------------*/
 .field { display: grid; gap: .4rem; min-width: 0; }
 .field label { font-size: var(--fs-small); font-weight: 700; color: var(--ink); }
@@ -689,6 +792,13 @@ a { color: inherit; text-decoration-thickness: 1px; text-underline-offset: .22em
 .mobile-bar a.is-primary { background: var(--gold); }
 .mobile-bar svg { width: 18px; height: 18px; }
 @media (max-width: 720px) { .mobile-bar { display: flex; } body { padding-bottom: 56px; } }
+/* Held back until the hero is behind you: over the hero it competes with the
+   hero's own CTAs. Scoped to .js so it stays visible without the script. */
+.js .mobile-bar {
+  transform: translateY(115%); opacity: 0; pointer-events: none;
+  transition: transform 400ms var(--ease-out), opacity 240ms var(--ease);
+}
+.js .mobile-bar.is-on { transform: none; opacity: 1; pointer-events: auto; }
 
 /* --- Footer --------------------------------------------------------------*/
 .footer { background: var(--grad-silk); border-top: var(--rule-h) solid var(--gold); }
@@ -700,6 +810,11 @@ a { color: inherit; text-decoration-thickness: 1px; text-underline-offset: .22em
   margin-bottom: var(--sp-3);
 }
 .footer ul { display: grid; gap: .7rem; }
+/* Keep the markers, but inside the gutter — flush left they sat on the very
+   edge of a phone screen. The reset strips markers from any classed list, so
+   this one asks for them back explicitly. */
+ul.footer__pages { list-style: disc; padding-inline-start: 1.15rem; }
+.footer__pages li::marker { color: var(--gold); }
 /* 24px minimum target height (WCAG 2.2 target size) */
 .footer a {
   display: inline-block; padding-block: .3rem;
@@ -725,6 +840,13 @@ a { color: inherit; text-decoration-thickness: 1px; text-underline-offset: .22em
 .js .reveal[data-delay="1"].is-in { transition-delay: 70ms; }
 .js .reveal[data-delay="2"].is-in { transition-delay: 140ms; }
 .js .reveal[data-delay="3"].is-in { transition-delay: 210ms; }
+/* On a phone the stacked columns are read one after another, so a long
+   travel and a stagger only ever read as lag. */
+@media (max-width: 720px) {
+  .js .reveal { transform: translateY(12px); }
+  .js .reveal.is-in { transition-duration: 420ms; }
+  .js .reveal[data-delay].is-in { transition-delay: 0ms; }
+}
 @media (prefers-reduced-motion: reduce) {
   .js .reveal { opacity: 1; transform: none; }
 }
@@ -787,12 +909,20 @@ a { color: inherit; text-decoration-thickness: 1px; text-underline-offset: .22em
 .spec-list dt.eyebrow::before { width: 16px; }
 .spec-list dd { font-size: .95rem; font-weight: 700; color: var(--ink); margin: .4rem 0 0; }
 .section--dark .spec-list dd { color: var(--white); }
+/* The three founder facts stay on one line on a phone rather than leaving
+   "Covers" orphaned underneath; the type steps down to pay for it. */
+@media (max-width: 720px) {
+  .spec-list--inline { grid-template-columns: repeat(3, 1fr); gap: var(--sp-3); }
+  .spec-list--inline dt.eyebrow { font-size: .56rem; letter-spacing: .1em; }
+  .spec-list--inline dt.eyebrow::before { display: none; }
+  .spec-list--inline dd { font-size: .74rem; line-height: 1.4; margin-top: .3rem; }
+}
 
 /* --- Narrow screens: buttons stack to equal width -------------------------*/
 @media (max-width: 520px) {
   .btn-row { flex-direction: column; align-items: stretch; }
   .btn-row .btn { width: 100%; }
-  .tones { gap: .5rem; }
+
   .tone { width: 48px; height: 48px; }
 }
 

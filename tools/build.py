@@ -248,7 +248,7 @@ def footer(lang, C):
     </div>
     <div>
       <h2 class="footer__title">{e(f['sitemap'])}</h2>
-      <ul>{cols}</ul>
+      <ul class="footer__pages">{cols}</ul>
     </div>
     <div>
       <h2 class="footer__title">{e(f['contact'])}</h2>
@@ -517,7 +517,7 @@ def page_index(lang, C):
       <p class="eyebrow">{e(H['founder']['eyebrow'])}</p>
       <h2 class="h2-caps">{e(H['founder']['h2'])}</h2>
       {''.join(f'<p class="mt-4">{e(p)}</p>' for p in H['founder']['paras'])}
-      <dl class="spec-list mt-6">{founder_facts}</dl>
+      <dl class="spec-list spec-list--inline mt-6">{founder_facts}</dl>
       <div class="btn-row mt-6">
         <a class="btn btn--ghost" href="{slug_href('about', lang, lang)}">{e(H['founder']['cta'])}</a>
       </div>
@@ -532,7 +532,8 @@ def page_index(lang, C):
       <h2 class="h2-caps">{e(H['reviews']['h2'])}</h2>
       <p class="lead">{e(H['reviews']['lead'])}</p>
     </div>
-    <div class="grid grid--3 mt-6">{reviews}</div>
+    <div class="reviews mt-6" data-reviews data-lenis-prevent>{reviews}</div>
+    <div class="reviews__dots" data-reviews-dots></div>
     <div class="btn-row mt-5" style="justify-content:center">
       <a class="btn btn--ghost" href="{SITE['instagram']}" target="_blank" rel="noopener">{e(H['reviews']['ig_cta'])}</a>
     </div>

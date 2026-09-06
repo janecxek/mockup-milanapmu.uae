@@ -69,6 +69,19 @@
     window.scrollTo({ top: y, behavior: reduceMotion ? 'auto' : 'smooth' });
   }
 
+  /* --- Bottom bar: held back until the hero is off screen -----------------
+     Over the hero it duplicates the hero's own CTAs; below it, it is the only
+     thing on screen that books.                                             */
+  function updateBar() {
+    var bar = document.querySelector('.mobile-bar');
+    if (!bar) return;
+    var hero = document.querySelector('.hero');
+    var y = window.scrollY || document.documentElement.scrollTop;
+    /* Pages without a hero (every inner page) just need a nudge of scroll. */
+    var trigger = hero ? hero.offsetTop + hero.offsetHeight - 140 : 120;
+    bar.classList.toggle('is-on', y > trigger);
+  }
+
   /* --- Header: stuck state + gold rule as scroll progress ---------------- */
   function updateHeader() {
     var header = document.querySelector('.header');
@@ -80,6 +93,7 @@
       var pct = max > 0 ? Math.min(100, (y / max) * 100) : 0;
       rule.style.setProperty('--progress', pct.toFixed(2) + '%');
     }
+    updateBar();
   }
 
   /* --- Navigation: veil, then go ------------------------------------------
@@ -101,9 +115,17 @@
     window.setTimeout(function () {
       /* If the next page is slow to arrive we are still here — turn the plain
          cover into a real loading state rather than an empty screen. */
-      window.setTimeout(function () { veil.classList.add('veil--loading'); }, 500);
+      window.setTimeout(function () { veil.classList.add('veil--loading'); }, 260);
       window.location.href = url;
     }, wait);
+  }
+
+  function closeDrawer() {
+    var header = document.querySelector('.header');
+    var burger = document.querySelector('.burger');
+    if (header) header.classList.remove('drawer-open');
+    if (burger) burger.setAttribute('aria-expanded', 'false');
+    lockScroll(false);
   }
 
   function isPlainLeftClick(e) {
@@ -114,16 +136,47 @@
   function wire() {
     updateHeader();
 
-    /* Mobile drawer */
+    /* Mobile drawer. The panel animates on max-height, which needs a real
+       number: transitioning to a guessed value makes it snap open early and
+       crawl shut. Measure the content instead, and re-measure on resize. */
     var burger = document.querySelector('.burger');
     var header = document.querySelector('.header');
-    if (burger && header) {
+    if (burger && header && !burger.dataset.wired) {
+      burger.dataset.wired = '1';
+
+      /* Per panel, not summed: one shared height clips whichever group is
+         taller. Measured with the constraint lifted — reading scrollHeight
+         through max-height:0 is unreliable — and restored in the same frame,
+         so nothing is ever painted expanded. */
+      var measureDrawer = function () {
+        header.querySelectorAll('.nav').forEach(function (nav) {
+          var prev = nav.style.maxHeight;
+          nav.style.maxHeight = 'none';
+          var h = 0;
+          Array.prototype.forEach.call(nav.children, function (child) {
+            var cs = getComputedStyle(child);
+            if (cs.display === 'none') return;
+            h += child.offsetHeight +
+                 (parseFloat(cs.marginTop) || 0) + (parseFloat(cs.marginBottom) || 0);
+          });
+          var pad = getComputedStyle(nav);
+          h += (parseFloat(pad.paddingTop) || 0) + (parseFloat(pad.paddingBottom) || 0);
+          nav.style.maxHeight = prev;
+          nav.style.setProperty('--nav-h', Math.ceil(h) + 'px');
+        });
+      };
+
       burger.addEventListener('click', function () {
         var open = burger.getAttribute('aria-expanded') === 'true';
+        if (!open) measureDrawer();
         burger.setAttribute('aria-expanded', String(!open));
         header.classList.toggle('drawer-open', !open);
         lockScroll(!open);
       });
+
+      window.addEventListener('resize', function () {
+        if (header.classList.contains('drawer-open')) measureDrawer();
+      }, { passive: true });
     }
 
     /* Reveal on scroll */
@@ -137,8 +190,41 @@
           entry.target.classList.add('is-in');
           io.unobserve(entry.target);
         });
-      }, { rootMargin: '0px 0px -12% 0px', threshold: 0.08 });
+      /* threshold 0: a column taller than the viewport never reaches a
+         fractional threshold until you have scrolled well past its top, which
+         is what made the service sections' second column arrive late.
+
+         On a phone the columns stack, so the second one starts far below the
+         fold; a positive bottom margin starts it revealing before it gets
+         there, and it has already arrived by the time you scroll to it. */
+      }, {
+        rootMargin: window.matchMedia('(max-width: 720px)').matches
+          ? '0px 0px 18% 0px'
+          : '0px 0px -6% 0px',
+        threshold: 0
+      });
       revealables.forEach(function (el) { io.observe(el); });
+
+      /* A service section's two columns stack on a phone, so the second one
+         starts a screen and a half below the first — observed separately it
+         can only ever arrive after you have read your way down to it. Reveal
+         the section as one unit instead: by the time its body is on screen it
+         is already there. */
+      if (window.matchMedia('(max-width: 720px)').matches) {
+        document.querySelectorAll('.svc').forEach(function (section) {
+          var parts = section.querySelectorAll('.reveal');
+          if (!parts.length) return;
+          parts.forEach(function (part) { io.unobserve(part); });
+          var groupIo = new IntersectionObserver(function (entries) {
+            entries.forEach(function (entry) {
+              if (!entry.isIntersecting) return;
+              parts.forEach(function (part) { part.classList.add('is-in'); });
+              groupIo.unobserve(entry.target);
+            });
+          }, { rootMargin: '0px 0px 10% 0px', threshold: 0 });
+          groupIo.observe(section);
+        });
+      }
     }
 
     /* Before / after sliders */
@@ -153,10 +239,72 @@
     initMatcher();
     initFaq();
     initDialog();
+    initReviews();
 
     document.querySelectorAll('[data-year]').forEach(function (el) {
       el.textContent = String(new Date().getFullYear());
     });
+  }
+
+  /* --- Reviews slider -----------------------------------------------------
+     The track is a native scroll-snap row below 720px, so the swipe, its
+     momentum and its accessibility all come from the platform; this only adds
+     the dots and keeps them in step. Above that width the same markup is an
+     ordinary grid and none of this applies.                                 */
+  function initReviews() {
+    var track = document.querySelector('[data-reviews]');
+    var dots = document.querySelector('[data-reviews-dots]');
+    if (!track || !dots || track.dataset.wired) return;
+    track.dataset.wired = '1';
+
+    var slides = Array.prototype.slice.call(track.children);
+    if (slides.length < 2) return;
+
+    var isSlider = function () {
+      return getComputedStyle(track).overflowX !== 'visible';
+    };
+
+    slides.forEach(function (slide, i) {
+      var b = document.createElement('button');
+      b.type = 'button';
+      b.setAttribute('aria-label', String(i + 1));
+      b.addEventListener('click', function () {
+        track.scrollTo({ left: slide.offsetLeft - track.offsetLeft,
+                         behavior: reduceMotion ? 'auto' : 'smooth' });
+      });
+      dots.appendChild(b);
+    });
+    var buttons = Array.prototype.slice.call(dots.children);
+
+    var sync = function () {
+      var mid = track.scrollLeft + track.clientWidth / 2;
+      var best = 0, bestGap = Infinity;
+      slides.forEach(function (slide, i) {
+        var centre = slide.offsetLeft - track.offsetLeft + slide.offsetWidth / 2;
+        var gap = Math.abs(centre - mid);
+        if (gap < bestGap) { bestGap = gap; best = i; }
+      });
+      buttons.forEach(function (b, i) {
+        b.setAttribute('aria-current', String(i === best));
+      });
+    };
+
+    var ticking = false;
+    track.addEventListener('scroll', function () {
+      if (ticking) return;
+      ticking = true;
+      requestAnimationFrame(function () { sync(); ticking = false; });
+    }, { passive: true });
+    window.addEventListener('resize', sync, { passive: true });
+    sync();
+
+    /* Slides two and three sit outside the viewport horizontally, so the
+       reveal observer would never fire for them and they would stay blank. */
+    if (isSlider) {
+      track.querySelectorAll('.reveal').forEach(function (el) {
+        el.classList.add('is-in');
+      });
+    }
   }
 
   /* --- FAQ: animated disclosure -------------------------------------------
@@ -222,11 +370,7 @@
         if (!isPlainLeftClick(e)) return;
         e.preventDefault();
         lastFocus = trigger;
-        if (header && header.classList.contains('drawer-open')) {
-          header.classList.remove('drawer-open');
-          var b = document.querySelector('.burger');
-          if (b) b.setAttribute('aria-expanded', 'false');
-        }
+        if (header && header.classList.contains('drawer-open')) closeDrawer();
         dlg.showModal();
         lockScroll(true);
       });
@@ -331,9 +475,8 @@
       var header = document.querySelector('.header');
       if (e.key !== 'Escape' || !header || !header.classList.contains('drawer-open')) return;
       var burger = document.querySelector('.burger');
-      header.classList.remove('drawer-open');
-      if (burger) { burger.setAttribute('aria-expanded', 'false'); burger.focus(); }
-      lockScroll(false);
+      closeDrawer();
+      if (burger) burger.focus();
     });
 
     /* Every internal navigation goes through the veil */
@@ -356,8 +499,7 @@
       if (url.pathname === location.pathname && url.hash) return;   /* let the browser handle it */
 
       e.preventDefault();
-      var header = document.querySelector('.header');
-      if (header) header.classList.remove('drawer-open');
+      closeDrawer();
       leaveTo(a.href, a.hasAttribute('data-lang') ? 'lang' : 'page');
     });
 
@@ -367,7 +509,7 @@
       var veil = document.getElementById('veil');
       if (veil) veil.classList.remove('is-on', 'veil--loading');
       html.classList.remove('is-entering', 'is-entering-lang');
-      lockScroll(false);
+      closeDrawer();
     });
 
     /* The booking form composes a WhatsApp message; no backend involved. */
