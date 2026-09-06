@@ -4,8 +4,11 @@
 # build step here — the job only gathers the deployable subset (everything
 # except the generator, the preview bundle and the docs) and hands it to Pages.
 #
-# `enablement: true` turns Pages on through the API the first time this runs,
-# so the repo needs no manual setup in Settings -> Pages.
+# Pages must be switched on once by hand first: Settings -> Pages -> Source ->
+# "GitHub Actions". The workflow cannot do it — creating a Pages site needs repo
+# administration rights, which the default GITHUB_TOKEN is never granted, so
+# configure-pages with `enablement: true` fails with "Resource not accessible by
+# integration" no matter what `permissions:` says.
 name: Deploy to GitHub Pages
 
 on:
@@ -34,8 +37,6 @@ jobs:
 
       - name: Configure Pages
         uses: actions/configure-pages@v5
-        with:
-          enablement: true
 
       - name: Assemble the deployable tree
         run: |
