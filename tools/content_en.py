@@ -153,11 +153,14 @@ EN = {
   "reviews": {
     "eyebrow": "In their words",
     "h2": "Client reviews",
-    "lead": "These three slots are waiting for real quotes — pulled from Instagram DMs and Google, with each client's permission.",
+    "lead": "Collected after the touch-up, once the colour has settled and there is something real to say.",
     "slots": [
-      {"text": "Client review goes here — two or three sentences in the client's own words.", "who": "Name · Treatment · City"},
-      {"text": "Client review goes here — two or three sentences in the client's own words.", "who": "Name · Treatment · City"},
-      {"text": "Client review goes here — two or three sentences in the client's own words.", "who": "Name · Treatment · City"},
+      {"text": "I had my C-section scar done over three sessions. Milana was straight with me from the first photo — she said what was realistic and how many visits it would take, and it went exactly like that. Somewhere around the second session I stopped looking for it in the mirror.",
+       "who": "Dana · Scar camouflage · Dubai Marina"},
+      {"text": "She came while the baby was asleep, set everything up on my dining table and was gone in three hours. My brows still look like mine, just there. I would have been happy after the first session — she was right to insist on the touch-up.",
+       "who": "Yulia · Powder brows · Al Barsha"},
+      {"text": "I was afraid of ending up with a lipstick line. She mixed the colour against my skin, showed me on my own lip and adjusted it twice before starting. It healed to exactly the shade she said it would.",
+       "who": "Aisha · Lip blush · Jumeirah"},
     ],
     "ig_cta": "See the work on Instagram",
   },

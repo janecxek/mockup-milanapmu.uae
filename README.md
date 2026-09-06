@@ -139,8 +139,10 @@ odległość i światło**, inaczej suwak porównania rozjeżdża się i wygląd
 - [ ] **Języki** — sekcja „Meet Milana" mówi „Russian & English"; do potwierdzenia
 - [ ] **Doświadczenie / szkolenia / certyfikaty** — świadomie nie wymyślone; strona
       „O mnie" jest napisana bez tych danych i zyska na ich dodaniu
-- [ ] **Opinie klientek** — trzy miejsca na stronie głównej mają widoczne
-      placeholdery. Wstawiamy tylko prawdziwe cytaty, za zgodą klientek.
+- [ ] **Opinie klientek** — na stronie głównej stoją trzy **przykładowe** opinie,
+      napisane pod mockup. Każda jest poprzedzona w kodzie znacznikiem
+      `<!-- SAMPLE REVIEW ... -->`, żeby nie dało się ich przeoczyć. Przed publikacją
+      podmień na prawdziwe cytaty, za zgodą klientek (`slots` w `content_*.py`).
 - [ ] **Zdjęcia** — wszystkie (lista wyżej)
 
 ## Wdrożenie

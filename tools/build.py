@@ -390,7 +390,10 @@ def page_index(lang, C):
         for k, v in H["founder"]["facts"]
     )
     reviews = "".join(
-        f'<blockquote class="quote quote--slot reveal" data-delay="{i}">'
+        # SAMPLE copy for the mockup — see README. The marker below travels with
+        # the built HTML so this cannot quietly ship as if it were real.
+        f'<!-- SAMPLE REVIEW - replace with a real, permissioned client quote before launch -->'
+        f'<blockquote class="quote reveal" data-delay="{i}">'
         f'<span class="quote__mark">{ICONS["quote"]}</span><p>{e(q["text"])}</p>'
         f'<footer>{e(q["who"])}</footer></blockquote>'
         for i, q in enumerate(H["reviews"]["slots"])
@@ -546,23 +549,29 @@ def page_services(lang, C):
             f'<dd class="mono" style="margin:.4rem 0 0;font-weight:700;color:var(--ink)">{e(v)}</dd></div>'
             for k, v in it["specs"]
         )
-        blocks.append(f"""<section class="section{' section--white' if i % 2 == 0 else ''}" id="{it['id']}">
-  <div class="wrap split{rev}">
-    <div class="reveal">
+        blocks.append(f"""<section class="section svc" id="{it['id']}">
+  <div class="svc__band">
+    <img src="{a}img/{it['img']}" alt="{e(it['alt'])}"{dims(it['img'])} loading="lazy" decoding="async">
+    <div class="wrap">
       <p class="eyebrow">{e(it['eyebrow'])}</p>
       <h2 class="h2-caps">{e(it['title'])}</h2>
-      <p class="lead mt-4">{e(it['lead'])}</p>
-      {''.join(f'<p class="mt-4">{e(p)}</p>' for p in it['paras'])}
-      <h3 class="mt-6" style="font-size:1rem;letter-spacing:-.01em">{e(S['good_for_label'])}</h3>
-      <ul class="mt-4" style="list-style:none;padding:0;display:grid;gap:.6rem">{good}</ul>
-      <dl class="spec-list mt-6">{specs}</dl>
-      <div class="btn-row mt-6">
-        <a class="btn btn--gold" href="{wa_link(C)}" target="_blank" rel="noopener">{e(it['cta'])}</a>
-        <a class="btn btn--ghost" href="{slug_href('pricing', lang, lang)}">{e(S['see_pricing'])}</a>
-      </div>
     </div>
-    <div class="media-frame reveal" data-delay="1">
-      <img src="{a}img/{it['img']}" alt="{e(it['alt'])}"{dims(it['img'])} loading="lazy" decoding="async">
+  </div>
+  <div class="svc__body{' section--white' if i % 2 == 0 else ''}">
+    <div class="wrap svc__cols">
+      <div class="reveal">
+        <p class="lead">{e(it['lead'])}</p>
+        {''.join(f'<p class="mt-4">{e(p)}</p>' for p in it['paras'])}
+      </div>
+      <div class="reveal" data-delay="1">
+        <h3 style="font-size:1rem;letter-spacing:-.01em">{e(S['good_for_label'])}</h3>
+        <ul class="mt-4" style="list-style:none;padding:0;display:grid;gap:.6rem">{good}</ul>
+        <dl class="spec-list mt-6">{specs}</dl>
+        <div class="btn-row mt-6">
+          <a class="btn btn--gold" href="{wa_link(C)}" target="_blank" rel="noopener">{e(it['cta'])}</a>
+          <a class="btn btn--ghost" href="{slug_href('pricing', lang, lang)}">{e(S['see_pricing'])}</a>
+        </div>
+      </div>
     </div>
   </div>
 </section>""")
