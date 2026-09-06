@@ -110,17 +110,15 @@ zależności zewnętrznych, wgraj `lenis.min.js` do `assets/js/` i podmień `src
 
 ## Zdjęcia
 
-Osiem kadrów scenicznych jest już wgranych jako WebP. Do uzupełnienia zostały
-tylko pary przed/po — nadal są placeholderami z widocznym podpisem „BEFORE / AFTER".
+Wszystkie zdjęcia na stronie są prawdziwe — **nie ma już żadnych placeholderów**.
 
-| Plik | Status | Wymiary |
-|---|---|---|
-| `hero.webp` | gotowe | 1672×941 |
-| `service-brows.webp` · `service-lips.webp` · `service-camo.webp` | gotowe | 1400×788 |
-| `detail-pigments.webp` · `home-service.webp` · `studio.webp` | gotowe | 1400×933 |
-| `portrait.webp` | gotowe | 1024×1536 |
-| `gallery-*.webp` (6 szt., galeria na Rezultatach) | gotowe — prawdziwe prace | ~900×1200, pionowe |
-| `ba-brows-*` · `ba-lips-*` · `ba-camo-*` | **placeholder** | 1200×900 |
+| Plik | Gdzie |
+|---|---|
+| `hero.webp` | tło hero na stronie głównej |
+| `service-brows/lips/camo.webp` | tła sekcji usług + karty na głównej |
+| `detail-pigments.webp` · `home-service.webp` · `studio.webp` | sekcje procesu i bezpieczeństwa |
+| `portrait.webp` | „Meet Milana" i strona O mnie |
+| `gallery-*.webp` (6 szt.) | galeria na Rezultatach + trzy na głównej |
 
 Pliki źródłowe PNG nie są trzymane w repo — w repozytorium są tylko skonwertowane
 WebP (17 MB → 529 KB). Konwersja: `tools/` nie ma do tego skryptu, robiona jednorazowo
@@ -129,9 +127,6 @@ przez canvas w headless Chromium.
 Wymiary są wpisane w `DIMS` w `tools/build.py` i trafiają na `<img>` jako
 `width`/`height`, żeby przeglądarka rezerwowała miejsce zanim plik dojedzie.
 **Podmieniając zdjęcie na inne o innych proporcjach, zaktualizuj `DIMS`.**
-
-Pary przed/po wymagają szczególnej uwagi: obie połowy muszą mieć **identyczny kadr,
-odległość i światło**, inaczej suwak porównania rozjeżdża się i wygląda na oszustwo.
 
 ## Do potwierdzenia z klientką (placeholdery)
 
@@ -151,10 +146,11 @@ odległość i światło**, inaczej suwak porównania rozjeżdża się i wygląd
       napisane pod mockup. Każda jest poprzedzona w kodzie znacznikiem
       `<!-- SAMPLE REVIEW ... -->`, żeby nie dało się ich przeoczyć. Przed publikacją
       podmień na prawdziwe cytaty, za zgodą klientek (`slots` w `content_*.py`).
-- [ ] **Zdjęcia przed/po** — sześć plików `ba-*` to jedyne pozostałe placeholdery.
-      Zdjęcia dostarczone w drugiej paczce to **pojedyncze efekty końcowe**, nie pary
-      przed/po — trafiły do galerii na Rezultatach. Do suwaków potrzebne są zdjęcia
-      tej samej klientki przed i po, w tym samym kadrze i świetle.
+- [ ] **Zdjęcia przed/po (opcjonalne)** — suwaki porównawcze zostały usunięte, bo nie
+      istnieją prawdziwe pary. Komponent (`ba_block()` w `tools/build.py`, style `.ba`
+      i obsługa klawiatury w `site.js`) jest w kodzie i udokumentowany. Jeśli Milana
+      kiedyś zbierze pary — to samo zdjęcie przed i po, ten sam kadr i światło —
+      przywrócenie sekcji to zmiana treści, nie przebudowa.
 - [ ] **Podpisy w galerii** — opisują to, co widać na zdjęciu, bez podawania etapu
       gojenia (nie znam go). Milana może je uzupełnić o czas i szczegóły.
 

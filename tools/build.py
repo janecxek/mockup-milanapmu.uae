@@ -279,6 +279,12 @@ def pigment_strip():
 
 
 def ba_block(asset, item, C):
+    """Before/after comparison slider.
+
+    Currently unused: no genuine before/after pairs exist yet. Kept wired up
+    (with its CSS and its keyboard-accessible range input) so the moment real
+    pairs arrive it is a content change, not a rebuild.
+    """
     return f"""<figure class="ba">
   <div class="ba__frame">
     <img src="{asset}img/{item['before']}" alt="{e(item['alt_before'])}" loading="lazy" decoding="async">
@@ -377,8 +383,10 @@ def page_index(lang, C):
     )
     bullets = "".join(f'<li class="tick">{e(b)}</li>' for b in H["camo"]["bullets"])
     results = "".join(
-        f'<div class="reveal" data-delay="{i}">{ba_block(a, it, C)}</div>'
-        for i, it in enumerate(H["results"]["items"])
+        f"""<figure class="card reveal" data-delay="{i}" style="margin:0">
+      <div class="card__media card__media--portrait"><img src="{a}img/{it['img']}" alt="{e(it['alt'])}"{dims(it['img'])} loading="lazy" decoding="async"></div>
+      <figcaption class="card__body"><span class="chip">{e(it['tag'])}</span><p style="font-size:.9rem">{e(it['caption'])}</p></figcaption>
+    </figure>""" for i, it in enumerate(H["results"]["items"])
     )
     timeline = "".join(
         f'<div class="timeline__step"><p class="timeline__day">{e(s["day"])}</p>'
@@ -650,10 +658,6 @@ def page_pricing(lang, C):
 def page_results(lang, C):
     a = "assets/" if lang == "en" else "../assets/"
     R = C["results"]
-    sliders = "".join(
-        f'<div class="reveal" data-delay="{i}">{ba_block(a, it, C)}</div>'
-        for i, it in enumerate(R["items"])
-    )
     tiles = "".join(
         f"""<figure class="card reveal" data-delay="{i % 3}" style="margin:0">
       <div class="card__media card__media--portrait"><img src="{a}img/{g['img']}" alt="{e(g['alt'])}"{dims(g['img'])} loading="lazy" decoding="async"></div>
@@ -673,18 +677,8 @@ def page_results(lang, C):
 {pigment_strip()}
 <section class="section section--white">
   <div class="wrap">
-    <div class="grid grid--3">{sliders}</div>
-    <p class="price-note mt-5">{e(R['slider_hint'])}</p>
-  </div>
-</section>
-<section class="section">
-  <div class="wrap">
-    <div class="head reveal">
-      <p class="eyebrow">{e(R['gallery_eyebrow'])}</p>
-      <h2 class="h2-caps">{e(R['gallery_h2'])}</h2>
-      <p class="lead">{e(R['gallery_lead'])}</p>
-    </div>
-    <div class="grid grid--3 mt-6">{tiles}</div>
+    <div class="grid grid--3">{tiles}</div>
+    <p class="price-note mt-6">{e(R['note'])}</p>
   </div>
 </section>
 {cta_band(lang, C, R['cta'])}
