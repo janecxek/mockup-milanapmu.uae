@@ -248,7 +248,7 @@ a { color: inherit; text-decoration-thickness: 1px; text-underline-offset: .22em
 @media (max-width: 1080px) {
   /* Explicit placement: brand and burger stay pinned to row 1 while the
      drawer's two nav groups stack underneath. */
-  .header__inner { grid-template-columns: 1fr auto; align-items: center; row-gap: 0; }
+  .header__inner { grid-template-columns: 1fr auto; align-items: center; align-content: center; row-gap: 0; }
   .brand { align-items: flex-start; grid-column: 1; grid-row: 1; }
   .burger { display: inline-flex; grid-column: 2; grid-row: 1; justify-self: end; }
   .nav { grid-column: 1 / -1; }
@@ -281,7 +281,8 @@ a { color: inherit; text-decoration-thickness: 1px; text-underline-offset: .22em
      short swallows it — the one gap in the menu with no line under it. */
   .nav--start .nav__link:last-child { border-bottom: 0; }
   .drawer-open .nav--end { border-top: 1px solid var(--line); }
-  .nav--end { padding: 0 0 var(--sp-4); }
+  .nav--end { padding: 0; }
+  .drawer-open .nav--end { padding-bottom: var(--sp-4); }
 
   .nav__link {
     padding: .95rem 0; font-size: 1.05rem; border-bottom: 1px solid var(--line);

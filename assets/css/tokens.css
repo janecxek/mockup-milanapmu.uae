@@ -117,5 +117,9 @@
 }
 
 @media (max-width: 720px) {
-  :root { --header-h: 64px; }
+  /* 72px, the height the phone header has actually been rendering: the
+     collapsed menu panel's padding was adding 8px the token never knew about,
+     so .page reserved 68px under a 76px bar and the top of every page slid
+     beneath it. The padding is gone; the token now states the real height. */
+  :root { --header-h: 72px; }
 }
