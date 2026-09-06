@@ -30,7 +30,10 @@ SITE = {
     "instagram_handle": "@milanapmu.uae",
     "founder": "https://www.instagram.com/milanulanbekova/",
     "founder_handle": "@milanulanbekova",
-    "domain": "https://milanapmu.ae",        # TODO real domain
+    # The address the site actually answers on today. canonical, hreflang and
+    # sitemap.xml are all built from this — change it here when the real
+    # domain goes live, then rebuild.
+    "domain": "https://mockup-milanapmu-uae.vercel.app",   # TODO milanapmu.ae at launch
 }
 
 PAGES = ["index", "services", "results", "pricing", "about", "faq", "contact"]

@@ -141,7 +141,10 @@ ffmpeg-a, więc skalowanie i kompresja idą przez canvas w headless Chromium.
 
 - [ ] **Numer telefonu / WhatsApp** — teraz `+971 50 000 0000` (`SITE` w `tools/build.py`)
 - [ ] **Adres e-mail** — teraz `hello@milanapmu.ae`
-- [ ] **Domena** — teraz `https://milanapmu.ae` (wpływa na `canonical`, `hreflang`, `sitemap.xml`)
+- [ ] **Domena** — teraz `https://mockup-milanapmu-uae.vercel.app`, czyli adres, pod
+      którym strona faktycznie stoi. Wpływa na `canonical`, `hreflang` i `sitemap.xml`.
+      Przy starcie pod `milanapmu.ae` zmień `SITE["domain"]` w `tools/build.py`
+      i przebuduj — inaczej wszystkie kanoniczne adresy będą wskazywać na mockup
 - [ ] **Godziny pracy** — teraz „By appointment" / „По записи"
 - [ ] **Ceny „On consultation"** — korekta, kamuflaż, kamuflaż na głowie i przekrycie
       starego PMU nie mają kwoty; trzeba wpisać realne widełki albo zostawić.

@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://milanapmu.ae/sitemap.xml
+Sitemap: https://mockup-milanapmu-uae.vercel.app/sitemap.xml

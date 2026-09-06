@@ -1,0 +1,55 @@
+# Publishes the built site to GitHub Pages on every push to main.
+#
+# The site is plain static files committed at the repo root, so there is no
+# build step here — the job only gathers the deployable subset (everything
+# except the generator, the preview bundle and the docs) and hands it to Pages.
+#
+# `enablement: true` turns Pages on through the API the first time this runs,
+# so the repo needs no manual setup in Settings -> Pages.
+name: Deploy to GitHub Pages
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Never let two deploys race; queue them instead of cancelling a live one.
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Configure Pages
+        uses: actions/configure-pages@v5
+        with:
+          enablement: true
+
+      - name: Assemble the deployable tree
+        run: |
+          mkdir _site
+          cp -r .nojekyll *.html assets ru robots.txt sitemap.xml _site/
+          echo "--- deploying:"
+          find _site -type f | wc -l
+          test -f _site/index.html
+          test -f _site/ru/index.html
+          test -f _site/assets/css/site.css
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+
+      - id: deployment
+        uses: actions/deploy-pages@v4
