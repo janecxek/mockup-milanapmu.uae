@@ -274,6 +274,13 @@ a { color: inherit; text-decoration-thickness: 1px; text-underline-offset: .22em
   /* Only while open — otherwise a collapsed panel still leaves a 1px line
      sitting under the header. */
   .drawer-open .nav--start { border-top: 1px solid var(--line); }
+
+  /* The divider between the two groups has to be drawn by the second panel.
+     Left to the last link's own border-bottom it lands exactly on the first
+     panel's clipping edge, and any rounding that puts the panel a fraction
+     short swallows it — the one gap in the menu with no line under it. */
+  .nav--start .nav__link:last-child { border-bottom: 0; }
+  .drawer-open .nav--end { border-top: 1px solid var(--line); }
   .nav--end { padding: 0 0 var(--sp-4); }
 
   .nav__link {

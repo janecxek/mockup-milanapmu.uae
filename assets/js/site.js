@@ -162,7 +162,9 @@
           var pad = getComputedStyle(nav);
           h += (parseFloat(pad.paddingTop) || 0) + (parseFloat(pad.paddingBottom) || 0);
           nav.style.maxHeight = prev;
-          nav.style.setProperty('--nav-h', Math.ceil(h) + 'px');
+          /* One pixel of headroom: the panel is clipped to this height and a
+             fractional shortfall shaves the last rule off. */
+          nav.style.setProperty('--nav-h', (Math.ceil(h) + 1) + 'px');
         });
       };
 
