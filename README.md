@@ -119,6 +119,7 @@ tylko pary przed/po — nadal są placeholderami z widocznym podpisem „BEFORE 
 | `service-brows.webp` · `service-lips.webp` · `service-camo.webp` | gotowe | 1400×788 |
 | `detail-pigments.webp` · `home-service.webp` · `studio.webp` | gotowe | 1400×933 |
 | `portrait.webp` | gotowe | 1024×1536 |
+| `gallery-*.webp` (6 szt., galeria na Rezultatach) | gotowe — prawdziwe prace | ~900×1200, pionowe |
 | `ba-brows-*` · `ba-lips-*` · `ba-camo-*` | **placeholder** | 1200×900 |
 
 Pliki źródłowe PNG nie są trzymane w repo — w repozytorium są tylko skonwertowane
@@ -150,7 +151,12 @@ odległość i światło**, inaczej suwak porównania rozjeżdża się i wygląd
       napisane pod mockup. Każda jest poprzedzona w kodzie znacznikiem
       `<!-- SAMPLE REVIEW ... -->`, żeby nie dało się ich przeoczyć. Przed publikacją
       podmień na prawdziwe cytaty, za zgodą klientek (`slots` w `content_*.py`).
-- [ ] **Zdjęcia** — wszystkie (lista wyżej)
+- [ ] **Zdjęcia przed/po** — sześć plików `ba-*` to jedyne pozostałe placeholdery.
+      Zdjęcia dostarczone w drugiej paczce to **pojedyncze efekty końcowe**, nie pary
+      przed/po — trafiły do galerii na Rezultatach. Do suwaków potrzebne są zdjęcia
+      tej samej klientki przed i po, w tym samym kadrze i świetle.
+- [ ] **Podpisy w galerii** — opisują to, co widać na zdjęciu, bez podawania etapu
+      gojenia (nie znam go). Milana może je uzupełnić o czas i szczegóły.
 
 ## Wdrożenie
 

@@ -46,6 +46,12 @@ DIMS = {
     "service-brows.webp": (1400, 788),
     "service-lips.webp": (1400, 788),
     "service-camo.webp": (1400, 788),
+    "gallery-brows-01.webp": (900, 1125),
+    "gallery-lips-01.webp": (900, 1350),
+    "gallery-lips-02.webp": (900, 1200),
+    "gallery-face-01.webp": (900, 1190),
+    "gallery-face-02.webp": (900, 1195),
+    "gallery-face-03.webp": (900, 1592),
 }
 
 
@@ -650,7 +656,7 @@ def page_results(lang, C):
     )
     tiles = "".join(
         f"""<figure class="card reveal" data-delay="{i % 3}" style="margin:0">
-      <div class="card__media"><img src="{a}img/{g['img']}" alt="{e(g['alt'])}"{dims(g['img'])} loading="lazy" decoding="async"></div>
+      <div class="card__media card__media--portrait"><img src="{a}img/{g['img']}" alt="{e(g['alt'])}"{dims(g['img'])} loading="lazy" decoding="async"></div>
       <figcaption class="card__body"><span class="chip">{e(g['tag'])}</span><p style="font-size:.9rem">{e(g['caption'])}</p></figcaption>
     </figure>""" for i, g in enumerate(R["gallery"])
     )
