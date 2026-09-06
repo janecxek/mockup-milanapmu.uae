@@ -72,6 +72,13 @@ Wersaliki występują tylko w dwóch miejscach: w nagłówkach display i w fonci
 Wszystko, co się klika, jest pisane normalnie — Manrope ma zbyt luźne światła
 przy wersalikach w parach typu „TS" (ROZDZIELA słowa RESULTS i WHATSAPP).
 
+**Sekcje usług na zdjęciu:** każda usługa na `services.html` ma zdjęcie jako tło całej
+sekcji, z treścią na wierzchu. Siłę przyciemnienia (`.svc::after`) dobrano **pomiarem**,
+a nie na oko: zrzut tła bez tekstu, próbkowanie luminancji i sprawdzenie kontrastu
+względem koloru tekstu. Aktualnie najgorszy przypadek to 6.2:1 na desktopie i 7.4:1
+na mobile, przy wymaganych 4.5:1. **Podmieniając zdjęcie na jaśniejsze, powtórz pomiar** —
+jasna fotografia potrafi zjechać poniżej progu przy tym samym przyciemnieniu.
+
 **Element sygnaturowy:** pasek odcieni skóry i interaktywny dobór pigmentu na stronie
 głównej. To nie ozdobnik — dobór pigmentu pod podton to faktyczne rzemiosło w kamuflażu blizn
 i to jedyna rzecz, której konkurencja nie ma.

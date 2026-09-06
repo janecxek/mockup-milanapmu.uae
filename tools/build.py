@@ -386,7 +386,7 @@ def page_index(lang, C):
     )
     founder_facts = "".join(
         f'<div><dt class="eyebrow" style="display:block">{e(k)}</dt>'
-        f'<dd class="mono" style="margin:.4rem 0 0;font-weight:700;color:var(--ink)">{e(v)}</dd></div>'
+        f'<dd class="mono">{e(v)}</dd></div>'
         for k, v in H["founder"]["facts"]
     )
     reviews = "".join(
@@ -546,19 +546,17 @@ def page_services(lang, C):
         good = "".join(f"<li class='tick'>{e(g)}</li>" for g in it["good_for"])
         specs = "".join(
             f'<div><dt class="eyebrow" style="display:block">{e(k)}</dt>'
-            f'<dd class="mono" style="margin:.4rem 0 0;font-weight:700;color:var(--ink)">{e(v)}</dd></div>'
+            f'<dd class="mono">{e(v)}</dd></div>'
             for k, v in it["specs"]
         )
-        blocks.append(f"""<section class="section svc" id="{it['id']}">
-  <div class="svc__band">
-    <img src="{a}img/{it['img']}" alt="{e(it['alt'])}"{dims(it['img'])} loading="lazy" decoding="async">
-    <div class="wrap">
+        blocks.append(f"""<section class="section svc section--dark" id="{it['id']}">
+  <img class="svc__bg" src="{a}img/{it['img']}" alt="{e(it['alt'])}"{dims(it['img'])} loading="lazy" decoding="async">
+  <div class="wrap">
+    <div class="svc__head reveal">
       <p class="eyebrow">{e(it['eyebrow'])}</p>
       <h2 class="h2-caps">{e(it['title'])}</h2>
     </div>
-  </div>
-  <div class="svc__body{' section--white' if i % 2 == 0 else ''}">
-    <div class="wrap svc__cols">
+    <div class="svc__cols">
       <div class="reveal">
         <p class="lead">{e(it['lead'])}</p>
         {''.join(f'<p class="mt-4">{e(p)}</p>' for p in it['paras'])}
