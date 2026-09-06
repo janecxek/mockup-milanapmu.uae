@@ -112,6 +112,10 @@ a { color: inherit; text-decoration-thickness: 1px; text-underline-offset: .22em
   font-weight: 700; font-size: var(--fs-small);
   letter-spacing: .005em;
   text-decoration: none; cursor: pointer;
+  /* A long label (Russian runs ~30% longer) stays inside the pill rather than
+     pushing its column. Only below 420px may it break mid-word — above that a
+     single word like "Записаться" must stay on one line. */
+  max-width: 100%; text-align: center;
   transition: transform var(--t-fast) var(--ease),
               box-shadow var(--t-base) var(--ease),
               background-color var(--t-base) var(--ease),
@@ -139,7 +143,9 @@ a { color: inherit; text-decoration-thickness: 1px; text-underline-offset: .22em
 .section--dark .btn--ghost { --btn-fg: var(--white); --btn-bd: var(--line-on-dark); }
 .section--dark .btn--ghost:hover { --btn-bd: var(--gold); }
 .btn--lg { min-height: 56px; padding: 1rem 2rem; font-size: .92rem; }
-.btn-row { display: flex; flex-wrap: wrap; gap: var(--sp-2); }
+@media (max-width: 420px) { .btn, .btn--lg { padding-inline: 1.15rem; overflow-wrap: anywhere; } }
+.btn-row { display: flex; flex-wrap: wrap; gap: var(--sp-2); min-width: 0; }
+
 
 /* --- Header --------------------------------------------------------------*/
 .header {
@@ -334,7 +340,16 @@ a { color: inherit; text-decoration-thickness: 1px; text-underline-offset: .22em
 .grid { display: grid; gap: var(--sp-4); }
 .grid--3 { grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr)); }
 .grid--2 { grid-template-columns: repeat(auto-fit, minmax(min(100%, 340px), 1fr)); }
-.grid--4 { grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr)); }
+/* Explicit steps rather than auto-fit: a four-item grid must not land on three
+   columns and orphan the fourth on a row of its own. */
+.grid--4 { grid-template-columns: 1fr; }
+@media (min-width: 520px)  { .grid--4 { grid-template-columns: 1fr 1fr; } }
+@media (min-width: 1000px) { .grid--4 { grid-template-columns: repeat(4, 1fr); } }
+/* Exactly four photo cards: 1 / 2 / 4 columns, so the last one is never
+   orphaned on a row of its own the way auto-fit would leave it. */
+.grid--cards4 { grid-template-columns: 1fr; }
+@media (min-width: 620px)  { .grid--cards4 { grid-template-columns: 1fr 1fr; } }
+@media (min-width: 1080px) { .grid--cards4 { grid-template-columns: repeat(4, 1fr); } }
 
 .card {
   position: relative; display: flex; flex-direction: column;
@@ -502,6 +517,87 @@ a { color: inherit; text-decoration-thickness: 1px; text-underline-offset: .22em
 .price-table tbody th small { display: block; font-weight: 400; color: var(--ink-mute); font-size: var(--fs-small); margin-top: .2rem; }
 .price-table td:last-child { text-align: right; font-family: var(--font-mono); font-weight: 700; color: var(--ink); white-space: nowrap; }
 .price-note { font-size: .78rem; color: var(--ink-mute); }
+
+/* --- Pricing menu ---------------------------------------------------------
+   The four fixed-price treatments, laid out as a printed menu rather than a
+   table: name and price on one baseline, joined by a leader rule. */
+.menu-grid { display: grid; gap: var(--sp-4); }
+@media (min-width: 640px)  { .menu-grid { grid-template-columns: 1fr 1fr; } }
+/* Three single treatments across, the combo on its own full-width row — so no
+   card is ever left orphaned beside an empty cell. */
+@media (min-width: 960px)  { .menu-grid { grid-template-columns: repeat(3, 1fr); } }
+
+@media (max-width: 420px) { .menu-item { padding: var(--sp-4); } }
+.menu-item {
+  position: relative; display: flex; flex-direction: column; gap: .55rem;
+  min-width: 0;   /* let the grid column shrink instead of tracking min-content */
+  padding: var(--sp-5); background: var(--white);
+  border: 1px solid var(--line); border-top: var(--rule-h) solid var(--gold);
+}
+.menu-item__head { display: flex; flex-wrap: wrap; align-items: baseline; gap: 0 var(--sp-3); }
+.menu-item__head h3 {
+  font-size: 1.06rem; letter-spacing: -.01em; margin: 0; color: var(--ink);
+  min-width: 0; overflow-wrap: anywhere;
+}
+/* The leader rule between name and price — it grows, they do not. */
+.menu-item__head::after {
+  content: ""; order: 1; flex: 1 1 auto; min-width: 1.5rem;
+  border-bottom: 1px dotted var(--line-strong); transform: translateY(-.24em);
+}
+.menu-item__price { order: 2; margin: 0; white-space: nowrap; font-family: var(--font-mono); }
+.menu-item__price span { font-size: 1.28rem; font-weight: 700; color: var(--ink); }
+.menu-item__price small { font-size: .68rem; font-weight: 500; letter-spacing: .12em; color: var(--ink-mute); }
+.menu-item__tag { margin: 0; font-size: .925rem; color: var(--ink-body); }
+.menu-item__link {
+  margin-top: auto; padding-top: .35rem; align-self: flex-start;
+  display: inline-flex; align-items: center; gap: .4rem; min-height: 24px;
+  font-family: var(--font-mono); font-size: .7rem; letter-spacing: .14em;
+  text-transform: uppercase; color: var(--gold-text); text-decoration: none;
+}
+.menu-item__link svg { width: 15px; height: 15px; transition: transform var(--dur-2) var(--ease-out); }
+.menu-item__link:hover svg { transform: translateX(3px); }
+
+.menu-item--featured { background: var(--silk-warm); border-color: var(--gold); }
+.menu-item--featured .menu-item__price span { color: var(--gold-text); }
+.menu-item__badge {
+  position: absolute; top: 0; right: var(--sp-4); transform: translateY(-50%);
+  padding: .28rem .6rem; background: var(--gold-deep); color: var(--white);
+  font-family: var(--font-mono); font-size: .64rem; font-weight: 500;
+  letter-spacing: .12em; text-transform: uppercase;
+}
+@media (min-width: 960px) { .menu-item--featured { grid-column: 1 / -1; } }
+
+.trust-badges {
+  list-style: none; margin: 0; padding: var(--sp-4) 0 0;
+  display: grid; gap: var(--sp-3) var(--sp-5);
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 210px), 1fr));
+  border-top: 1px solid var(--line);
+}
+.trust-badges li { display: flex; align-items: center; gap: .55rem; font-size: .875rem; color: var(--ink-body); }
+.trust-badges svg { flex: none; width: 17px; height: 17px; color: var(--gold-text); }
+
+/* --- Model offer ---------------------------------------------------------- */
+.offer__inner { display: grid; gap: var(--sp-5); align-items: center; }
+@media (min-width: 860px) { .offer__inner { grid-template-columns: 1fr auto; gap: var(--sp-7); } }
+.offer__body { max-width: 62ch; }
+.offer__tag {
+  padding: var(--sp-5); text-align: center; justify-self: start;
+  border: 1px solid rgba(255, 255, 255, .28);
+}
+@media (min-width: 860px) { .offer__tag { justify-self: end; min-width: 15rem; } }
+.offer__price {
+  margin: 0; font-family: var(--font-mono); font-size: clamp(1.9rem, 4vw, 2.6rem);
+  font-weight: 700; color: var(--gold-light); line-height: 1;
+}
+.offer__terms {
+  margin: .5rem 0 0; font-family: var(--font-mono); font-size: .7rem;
+  letter-spacing: .14em; text-transform: uppercase; color: var(--white);
+}
+.offer__flag {
+  margin: var(--sp-3) 0 0; padding-top: var(--sp-3); font-size: .8rem;
+  color: rgba(255, 255, 255, .78); border-top: 1px solid rgba(255, 255, 255, .22);
+}
+
 @media (max-width: 640px) {
   .price-table thead { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
   .price-table tbody tr { display: grid; gap: .25rem; padding-block: var(--sp-3); }
@@ -541,10 +637,13 @@ a { color: inherit; text-decoration-thickness: 1px; text-underline-offset: .22em
 .quote--slot p { color: var(--ink-mute); font-style: italic; }
 
 /* --- Forms ---------------------------------------------------------------*/
-.field { display: grid; gap: .4rem; }
+.field { display: grid; gap: .4rem; min-width: 0; }
 .field label { font-size: var(--fs-small); font-weight: 700; color: var(--ink); }
 .field .hint { font-size: .78rem; color: var(--ink-mute); }
 .field input, .field select, .field textarea {
+  /* A <select> is as wide as its longest <option> unless told otherwise, and
+     the Russian treatment list is long enough to widen the whole grid. */
+  width: 100%; min-width: 0; max-width: 100%;
   min-height: 48px; padding: .75rem 1rem;
   background: var(--white); border: 1.5px solid var(--line-strong);
   border-radius: var(--r-md); color: var(--ink);
@@ -555,6 +654,7 @@ a { color: inherit; text-decoration-thickness: 1px; text-underline-offset: .22em
   border-color: var(--gold); box-shadow: 0 0 0 3px var(--gold-veil); outline: none;
 }
 .form-grid { display: grid; gap: var(--sp-3); }
+.form-grid > * { min-width: 0; }
 @media (min-width: 640px) { .form-grid--2 { grid-template-columns: 1fr 1fr; } }
 .form-note { font-size: .78rem; color: var(--ink-mute); }
 

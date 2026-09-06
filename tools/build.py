@@ -45,7 +45,7 @@ DIMS = {
     "detail-pigments.webp": (1400, 933),
     "service-brows.webp": (1400, 788),
     "service-lips.webp": (1400, 788),
-    "service-camo.webp": (1400, 788),
+    "service-camo.webp": (1400, 788), "service-lashline.webp": (1400, 788),
     "gallery-brows-01.webp": (900, 1125),
     "gallery-lips-01.webp": (900, 1350),
     "gallery-lips-02.webp": (900, 1200),
@@ -60,6 +60,7 @@ def dims(name):
     return f' width="{wh[0]}" height="{wh[1]}"' if wh else ""
 
 ICONS = {
+    "check": '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12.5 9 17.5 20 6.5"/></svg>',
     "arrow": '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>',
     "whatsapp": '<svg viewBox="0 0 32 32" fill="currentColor" aria-hidden="true"><path d="M16.02 3.2c-7.06 0-12.8 5.74-12.8 12.8 0 2.26.6 4.47 1.73 6.42L3.2 28.8l6.55-1.71a12.75 12.75 0 0 0 6.27 1.6h.01c7.06 0 12.8-5.74 12.8-12.8s-5.75-12.69-12.81-12.69zm0 23.04h-.01a10.6 10.6 0 0 1-5.4-1.48l-.39-.23-4.02 1.05 1.07-3.92-.25-.4a10.57 10.57 0 0 1-1.62-5.65c0-5.86 4.77-10.63 10.63-10.63 2.84 0 5.5 1.11 7.51 3.12a10.56 10.56 0 0 1 3.11 7.52c0 5.86-4.77 10.62-10.63 10.62z"/><path d="M21.86 18.7c-.32-.16-1.89-.93-2.18-1.04-.29-.11-.5-.16-.71.16s-.82 1.03-1 1.25c-.19.21-.37.24-.68.08-.32-.16-1.34-.49-2.55-1.57-.94-.84-1.58-1.87-1.77-2.19-.18-.32-.02-.49.14-.65.15-.14.32-.37.48-.56.16-.19.21-.32.32-.53.11-.21.05-.4-.03-.56-.08-.16-.71-1.72-.98-2.35-.26-.62-.52-.53-.71-.54h-.61c-.21 0-.56.08-.85.4-.29.32-1.11 1.09-1.11 2.64s1.14 3.06 1.29 3.27c.16.21 2.24 3.42 5.43 4.8.76.33 1.35.52 1.81.67.76.24 1.45.21 2 .13.61-.09 1.89-.77 2.15-1.52.27-.75.27-1.38.19-1.52-.08-.13-.29-.21-.61-.37z"/></svg>',
     "instagram": '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="3.6"/><circle cx="17.2" cy="6.8" r="1.1" fill="currentColor" stroke="none"/></svg>',
@@ -443,7 +444,7 @@ def page_index(lang, C):
       </div>
       <p class="lead">{e(H['services']['lead'])}</p>
     </div>
-    <div class="grid grid--3 mt-6">{services}</div>
+    <div class="grid grid--cards4 mt-6">{services}</div>
   </div>
 </section>
 
@@ -607,6 +608,19 @@ def page_services(lang, C):
 
 def page_pricing(lang, C):
     P = C["pricing"]
+    M = P["menu"]
+    menu = "".join(
+        f'<article class="menu-item{" menu-item--featured" if it.get("featured") else ""} reveal" data-delay="{i}">'
+        + (f'<span class="menu-item__badge">{e(it["badge"])}</span>' if it.get("badge") else "")
+        + f'<div class="menu-item__head"><h3>{e(it["name"])}</h3>'
+          f'<p class="menu-item__price"><span>{e(it["price"])}</span> <small>{e(M["currency"])}</small></p></div>'
+          f'<p class="menu-item__tag">{e(it["tag"])}</p>'
+          f'<a class="menu-item__link" href="{slug_href("services", lang, lang)}{it["anchor"]}">'
+          f'{e(C["ui"]["more"])}{ICONS["arrow"]}</a></article>'
+        for i, it in enumerate(M["items"])
+    )
+    badges = "".join(f'<li>{ICONS["check"]}<span>{e(x)}</span></li>' for x in P["badges"])
+    O = P["offer"]
     rows = "".join(
         f'<tr><th scope="row">{e(r["name"])}<small>{e(r["note"])}</small></th>'
         f'<td>{e(r["duration"])}</td><td>{e(r["price"])}</td></tr>'
@@ -630,10 +644,40 @@ def page_pricing(lang, C):
     </div>
   </div>
 </section>
+<section class="section section--tight section--white">
+  <div class="wrap">
+    <div class="head reveal">
+      <p class="eyebrow">{e(M['eyebrow'])}</p>
+      <h2 class="h2-caps">{e(M['h2'])}</h2>
+    </div>
+    <div class="menu-grid mt-6">{menu}</div>
+    <ul class="trust-badges mt-6 reveal">{badges}</ul>
+  </div>
+</section>
+<section class="section section--dark offer">
+  <div class="wrap offer__inner reveal">
+    <div class="offer__body">
+      <p class="eyebrow">{e(O['label'])}</p>
+      <h2 class="h2-caps">{e(O['h3'])}</h2>
+      <p class="mt-4">{e(O['text'])}</p>
+      <div class="btn-row mt-6">
+        <a class="btn btn--gold" href="{wa_link(C)}" target="_blank" rel="noopener">{e(O['cta'])}</a>
+      </div>
+    </div>
+    <div class="offer__tag">
+      <p class="offer__price">{e(O['price'])}</p>
+      <p class="offer__terms">{e(O['terms'])}</p>
+      <p class="offer__flag">{e(O['flag'])}</p>
+    </div>
+  </div>
+</section>
 {pigment_strip()}
 <section class="section section--white">
   <div class="wrap">
-    <table class="price-table reveal">
+    <div class="head reveal">
+      <h2 class="h2-caps">{e(P['table_h2'])}</h2>
+    </div>
+    <table class="price-table reveal mt-6">
       <caption>{e(P['caption'])}</caption>
       <thead><tr><th scope="col">{e(P['th_service'])}</th><th scope="col">{e(P['th_time'])}</th><th scope="col">{e(P['th_price'])}</th></tr></thead>
       <tbody>{rows}</tbody>

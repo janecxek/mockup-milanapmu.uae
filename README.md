@@ -134,8 +134,17 @@ Wymiary są wpisane w `DIMS` w `tools/build.py` i trafiają na `<img>` jako
 - [ ] **Adres e-mail** — teraz `hello@milanapmu.ae`
 - [ ] **Domena** — teraz `https://milanapmu.ae` (wpływa na `canonical`, `hreflang`, `sitemap.xml`)
 - [ ] **Godziny pracy** — teraz „By appointment" / „По записи"
-- [ ] **Ceny poza 350 AED** — korekta, kamuflaż, kamuflaż na głowie i przekrycie
-      starego PMU mają „On request"; trzeba wpisać realne widełki albo zostawić
+- [ ] **Ceny „On consultation"** — korekta, kamuflaż, kamuflaż na głowie i przekrycie
+      starego PMU nie mają kwoty; trzeba wpisać realne widełki albo zostawić.
+      Ceny stałe (499 / 499 / 299 / 799 AED oraz 349 AED dla modelek) pochodzą
+      z jej grafiki MENU i są wpisane w `pricing.menu` / `pricing.offer`
+- [ ] **Czas zabiegu międzyrzęsowej** — karta usługi podaje tylko korektę,
+      trwałość i cenę; czasu w fotelu świadomie nie wymyślono
+- [ ] **Zdjęcie do sekcji „Lashline"** — `assets/img/service-lashline.webp` to
+      kadr z istniejącego zdjęcia klientki (`gallery-face-02`), przeskalowany do
+      1400×788 przez `tools/make_lashline_crop.py`. Działa jako tło pod
+      przyciemnieniem (zmierzone 6,1:1 dla białego tekstu), ale docelowo warto
+      wstawić osobne zdjęcie zrobione pod tę sekcję
 - [ ] **Kwota depozytu** — treść mówi, że depozyt potwierdza termin, ale nie podaje kwoty
 - [ ] **Czasy trwania i trwałość** — wpisane wartości branżowe (2,5–3 h, 1–2 lata itd.),
       Milana powinna je potwierdzić

@@ -4,11 +4,11 @@
 EN = {
 "meta": {
   "index":   {"title": "Milana PMU — Powder Brows, Lip Blush & Scar Camouflage in Dubai & Sharjah",
-              "desc": "Russian permanent makeup artist working at your home in Dubai and Sharjah. Powder brows and lip blush from 350 AED, plus scar and stretch mark camouflage matched to your skin tone."},
+              "desc": "Russian permanent makeup artist working at your home in Dubai and Sharjah. Powder brows and lip blush from 499 AED, plus scar and stretch mark camouflage matched to your skin tone."},
   "services":{"title": "Services — Powder Brows, Lip Blush, Scar Camouflage | Milana PMU",
-              "desc": "Powder brows and lip blush from 350 AED, and camouflage tattooing for scars, stretch marks, vitiligo and grafts. Home service in Dubai and Sharjah."},
+              "desc": "Powder brows and lip blush from 499 AED, and camouflage tattooing for scars, stretch marks, vitiligo and grafts. Home service in Dubai and Sharjah."},
   "pricing": {"title": "Pricing | Milana PMU Dubai & Sharjah",
-              "desc": "Powder brows and lip blush 350 AED, home visit included. Camouflage quoted per area after a patch test."},
+              "desc": "Powder brows and lip blush 499 AED, home visit included. Camouflage quoted per area after a patch test."},
   "results": {"title": "Results — Before & After | Milana PMU Dubai",
               "desc": "Healed powder brows, lip blush and scar camouflage, photographed in daylight without filters."},
   "about":   {"title": "About Milana — Russian PMU Artist in the UAE",
@@ -46,7 +46,7 @@ EN = {
   "hero_alt": "Placeholder for the hero photograph — a permanent makeup treatment in progress",
   "eyebrow": "Russian PMU artist · Dubai & Sharjah",
   "title_html": "Pigment matched<br>to <em>your skin</em>",
-  "lead": "Powder brows, lip blush and scar camouflage — done at your home, with a pigment mixed for your undertone and tested on your skin before the first pass.",
+  "lead": "Powder brows, lip blush, lashline and scar camouflage — done at your home, with a pigment mixed for your undertone and tested on your skin before the first pass.",
   "cta_primary": "Book on WhatsApp",
   "cta_secondary": "See results",
   "facts": [
@@ -56,15 +56,18 @@ EN = {
   ],
   "services": {
     "eyebrow": "What I do",
-    "h2": "Three treatments, one method",
-    "lead": "Brows and lips are about proportion and colour. Camouflage is about making something stop catching the eye. All three start the same way — by reading your undertone in daylight.",
+    "h2": "Four treatments, one method",
+    "lead": "Brows, lips and lashline are about proportion and colour. Camouflage is about making something stop catching the eye. All four start the same way — by reading your undertone in daylight.",
     "items": [
       {"img": "service-brows.webp", "alt": "Placeholder for a powder brows photograph",
-       "title": "Powder brows", "anchor": "#powder-brows", "price": "350 AED", "price_note": "from",
+       "title": "Powder brows", "anchor": "#powder-brows", "price": "499 AED", "price_note": "from",
        "text": "A soft gradient that reads as light powder — airy at the front, denser at the tail. Shape mapped to your face, not to a template."},
       {"img": "service-lips.webp", "alt": "Placeholder for a lip blush photograph",
-       "title": "Lip blush", "anchor": "#lip-blush", "price": "350 AED", "price_note": "from",
+       "title": "Lip blush", "anchor": "#lip-blush", "price": "499 AED", "price_note": "from",
        "text": "Colour worked into the lip to restore the border and even out tone. No lipstick edge — it reads as your lips on their best day."},
+      {"img": "service-lashline.webp", "alt": "A close-up of healed lashline enhancement",
+       "title": "Lashline", "anchor": "#lashline", "price": "299 AED", "price_note": "from",
+       "text": "Pigment set between the lashes so the lash line reads fuller and the eye looks more open. No line on the lid — it stops where the lashes do."},
       {"img": "service-camo.webp", "alt": "Placeholder for a scar camouflage photograph",
        "title": "Scar & stretch mark camouflage", "anchor": "#camouflage",
        "price": "On request", "price_note": "per area",
@@ -137,7 +140,7 @@ EN = {
     "h2": "Meet Milana",
     "img_alt": "Placeholder for a portrait of Milana at work",
     "paras": [
-      "I am a Russian permanent makeup artist working across Dubai and Sharjah. I chose to do three things properly rather than twenty adequately — brows, lips, and the camouflage work most artists turn away.",
+      "I am a Russian permanent makeup artist working across Dubai and Sharjah. I chose to do a short list properly rather than twenty treatments adequately — brows, lips, lashline, and the camouflage work most artists turn away.",
       "Letting someone into your home is a bigger ask than walking into a studio. So the kit is unsealed in front of you, the pigment is mixed against your skin while you watch, and nothing is tattooed until you have seen the shape in a mirror and said yes to it.",
     ],
     "facts": [
@@ -187,8 +190,8 @@ EN = {
 
 "services": {
   "eyebrow": "Services",
-  "h1": "Powder brows, lip blush, camouflage",
-  "lead": "Three treatments. Each one starts with your undertone and ends with a touch-up that sets the final colour.",
+  "h1": "Brows, lips, lashline, camouflage",
+  "lead": "Four treatments. Each one starts with your undertone and ends with a touch-up that sets the final colour.",
   "good_for_label": "Good for",
   "see_pricing": "See pricing",
   "items": [
@@ -199,7 +202,7 @@ EN = {
        "Colour is mixed to sit just under your hair at the front and slightly deeper at the tail, so the brow has direction instead of reading as a block. It looks strongest for the first three days, then settles into the tone you approved."],
      "good_for": ["Sparse or over-plucked brows", "Brows that disappear without makeup",
                   "Asymmetry you correct by hand every morning", "Oily skin, where microblading strokes blur"],
-     "specs": [("Session", "2.5-3 h"), ("Touch-up", "4-8 weeks"), ("Lasts", "1-2 years"), ("From", "350 AED")],
+     "specs": [("Session", "2.5-3 h"), ("Touch-up", "4-8 weeks"), ("Lasts", "1-2 years"), ("From", "499 AED")],
      "img": "service-brows.webp", "alt": "Placeholder for a powder brows photograph",
      "cta": "Book powder brows"},
     {"id": "lip-blush", "eyebrow": "Lips", "title": "Lip blush",
@@ -209,9 +212,21 @@ EN = {
        "Lips swell for about a day and go through a dry, flaky stage in the first week. The procedure can trigger cold sores — if you get them, arrange antiviral cover before the session and tell me at the consultation."],
      "good_for": ["Pale or uneven lip colour", "A border that has lost its definition",
                   "Slight asymmetry between the two sides", "Wanting colour without daily makeup"],
-     "specs": [("Session", "2.5-3 h"), ("Touch-up", "6-8 weeks"), ("Lasts", "1-3 years"), ("From", "350 AED")],
+     "specs": [("Session", "2.5-3 h"), ("Touch-up", "6-8 weeks"), ("Lasts", "1-3 years"), ("From", "499 AED")],
      "img": "service-lips.webp", "alt": "Placeholder for a lip blush photograph",
      "cta": "Book lip blush"},
+    {"id": "lashline", "eyebrow": "Eyes", "title": "Lashline",
+     "lead": "Pigment set between the lashes — the eye looks more open, with nothing drawn on the lid.",
+     "paras": [
+       "The pigment goes into the gaps between your own lashes, so the line of growth reads denser and darker than it is. It stops where the lashes stop: there is no flick, no wing and no line sitting on the skin above them.",
+       "It is the quietest of the four treatments and the one people notice without being able to say why. Because the area is small and the skin there is thin, the session is shorter than brows or lips, and the pigment settles within the first week."],
+     "good_for": ["Sparse or pale lashes that disappear without mascara",
+                  "Wanting definition that survives the gym and the pool",
+                  "Eyes that read tired in photographs",
+                  "Anyone who wants less than a full eyeliner"],
+     "specs": [("Touch-up", "4-8 weeks"), ("Lasts", "1-2 years"), ("From", "299 AED")],
+     "img": "service-lashline.webp", "alt": "A close-up of healed lashline enhancement",
+     "cta": "Book lashline"},
     {"id": "camouflage", "eyebrow": "Camouflage", "title": "Scar & stretch mark camouflage",
      "lead": "Making a mark stop catching the eye — by matching it, not covering it.",
      "paras": [
@@ -235,13 +250,41 @@ EN = {
 
 "pricing": {
   "eyebrow": "Pricing",
-  "h1": "What it costs",
-  "lead": "Brows and lips are fixed. Camouflage is quoted per area after a consultation, because a four-centimetre scar and a full abdomen are not the same job.",
+  "h1": "The menu",
+  "lead": "Brows, lips and lashline have a fixed price. Camouflage is quoted per area after a consultation, because a four-centimetre scar and a full abdomen are not the same job.",
   "caption": "Prices in AED. The home visit in Dubai and Sharjah is included.",
+
+  "menu": {
+    "eyebrow": "Permanent makeup",
+    "h2": "Enhance your beauty, naturally",
+    "currency": "AED",
+    "items": [
+      {"name": "Powder brows", "tag": "Soft, natural and long-lasting brows",
+       "price": "499", "anchor": "#powder-brows"},
+      {"name": "Lip blush", "tag": "Natural tint and definition for beautiful lips",
+       "price": "499", "anchor": "#lip-blush"},
+      {"name": "Lashline", "tag": "Define your eyes with subtle perfection",
+       "price": "299", "anchor": "#lashline"},
+      {"name": "Powder brows + lip blush", "tag": "The perfect combo for a complete look",
+       "price": "799", "anchor": "#powder-brows", "featured": True, "badge": "Save 199 AED"},
+    ],
+    "cta": "Book this",
+  },
+  "badges": ["Natural results", "Premium pigments", "Safe and hygienic", "Done by the artist herself"],
+
+  "offer": {
+    "label": "Model offer",
+    "price": "349 AED",
+    "terms": "Materials only",
+    "flag": "Limited slots",
+    "h3": "Come as a model",
+    "text": "A small number of appointments each month are open at cost — you pay for the pigment, needles and single-use kit, nothing for the work. The treatment is the same one everyone else books. In return I photograph the healed result for my portfolio, and you approve every photo before it is used.",
+    "cta": "Ask about model slots",
+  },
+
+  "table_h2": "Quoted after a consultation",
   "th_service": "Treatment", "th_time": "In the chair", "th_price": "Price",
   "rows": [
-    {"name": "Powder brows", "note": "Shape mapping, pigment match, first session", "duration": "2.5-3 h", "price": "350 AED"},
-    {"name": "Lip blush", "note": "Shape and colour consultation, first session", "duration": "2.5-3 h", "price": "350 AED"},
     {"name": "Touch-up", "note": "Booked 4-8 weeks after the first session", "duration": "1-2 h", "price": "On consultation"},
     {"name": "Scar & stretch mark camouflage", "note": "Quoted per area after a patch test", "duration": "1-3 h", "price": "On consultation"},
     {"name": "Scalp camouflage", "note": "Quoted after a consultation", "duration": "1-3 h", "price": "On consultation"},
@@ -297,7 +340,7 @@ EN = {
   "lead": "Russian permanent makeup and camouflage artist, working at clients' homes across Dubai and Sharjah.",
   "img_alt": "Placeholder for a portrait of Milana at work",
   "paras": [
-    "I work with three things: brows, lips and camouflage. That is deliberate. Camouflage in particular is slow, technical work — matching a pigment to skin, watching how it heals, correcting on the next session — and it does not sit comfortably alongside a menu of twenty treatments.",
+    "I work with four things: brows, lips, lashline and camouflage. That is deliberate. Camouflage in particular is slow, technical work — matching a pigment to skin, watching how it heals, correcting on the next session — and it does not sit comfortably alongside a menu of twenty treatments.",
     "Every appointment starts with your skin rather than with a pigment chart. Undertone is read in daylight, the mix is made on the day, and it is tested on you before the first pass. On camouflage it is tested and left to heal before a full area is started.",
     "And I come to you. Home service is not a compromise here: it means you heal in your own space, without a drive across the city in the sun on day one.",
   ],
@@ -406,7 +449,8 @@ EN = {
     "message_hint": "For camouflage, attach a daylight photo in the WhatsApp chat that opens.",
     "submit": "Open WhatsApp with this",
     "note": "The button opens WhatsApp with your details filled in. Nothing is sent until you press send there.",
-    "services": ["Powder brows", "Lip blush", "Scar camouflage", "Stretch mark camouflage",
+    "services": ["Powder brows", "Lip blush", "Lashline", "Powder brows + lip blush",
+                 "Scar camouflage", "Stretch mark camouflage",
                  "Scalp camouflage", "Correction of previous PMU", "Not sure yet"],
   },
   "areas_eyebrow": "Coverage",
