@@ -115,18 +115,27 @@ Wszystkie zdjęcia na stronie są prawdziwe — **nie ma już żadnych placehold
 | Plik | Gdzie |
 |---|---|
 | `hero.webp` | tło hero na stronie głównej |
-| `service-brows/lips/camo.webp` | tła sekcji usług + karty na głównej |
+| `service-brows/lips/camo/lashline.webp` | tła sekcji usług + karty na głównej |
 | `detail-pigments.webp` · `home-service.webp` · `studio.webp` | sekcje procesu i bezpieczeństwa |
 | `portrait.webp` | „Meet Milana" i strona O mnie |
 | `gallery-*.webp` (6 szt.) | galeria na Rezultatach + trzy na głównej |
 
 Pliki źródłowe PNG nie są trzymane w repo — w repozytorium są tylko skonwertowane
-WebP (17 MB → 529 KB). Konwersja: `tools/` nie ma do tego skryptu, robiona jednorazowo
-przez canvas w headless Chromium.
-
-Wymiary są wpisane w `DIMS` w `tools/build.py` i trafiają na `<img>` jako
+WebP. Wymiary są wpisane w `DIMS` w `tools/build.py` i trafiają na `<img>` jako
 `width`/`height`, żeby przeglądarka rezerwowała miejsce zanim plik dojedzie.
-**Podmieniając zdjęcie na inne o innych proporcjach, zaktualizuj `DIMS`.**
+
+Nowe zdjęcie wgrywa się jednym poleceniem — rozmiar bierze z `DIMS`, więc plik na
+dysku nie może się rozjechać z atrybutami w HTML-u:
+
+```
+python3 tools/png_to_webp.py <ścieżka-do-PNG> service-lashline.webp [0-1]
+```
+
+Ostatni argument to pionowe kotwiczenie kadru (0 = góra, 1 = dół, domyślnie 0,5) —
+przydaje się, gdy źródło ma inne proporcje niż docelowy box. Kadrowanie jest zawsze
+typu „cover", nigdy nie rozciąga obrazu. W kontenerze nie ma PIL-a, cwebp ani
+ffmpeg-a, więc skalowanie i kompresja idą przez canvas w headless Chromium.
+**Dodając zupełnie nowe zdjęcie, najpierw dopisz jego wymiary do `DIMS`.**
 
 ## Do potwierdzenia z klientką (placeholdery)
 
@@ -140,11 +149,11 @@ Wymiary są wpisane w `DIMS` w `tools/build.py` i trafiają na `<img>` jako
       z jej grafiki MENU i są wpisane w `pricing.menu` / `pricing.offer`
 - [ ] **Czas zabiegu międzyrzęsowej** — karta usługi podaje tylko korektę,
       trwałość i cenę; czasu w fotelu świadomie nie wymyślono
-- [ ] **Zdjęcie do sekcji „Lashline"** — `assets/img/service-lashline.webp` to
-      kadr z istniejącego zdjęcia klientki (`gallery-face-02`), przeskalowany do
-      1400×788 przez `tools/make_lashline_crop.py`. Działa jako tło pod
-      przyciemnieniem (zmierzone 6,1:1 dla białego tekstu), ale docelowo warto
-      wstawić osobne zdjęcie zrobione pod tę sekcję
+- [ ] **Zdjęcie do sekcji „Lashline"** — `assets/img/service-lashline.webp` jest
+      **wygenerowane przez AI** i pełni rolę wyłącznie dekoracyjnego tła sekcji.
+      Nie jest to zdjęcie klientki ani efekt pracy Milany i nie wolno go tak
+      podpisać. Galeria wyników korzysta wyłącznie z prawdziwych zdjęć.
+      Jeżeli pojawi się prawdziwe zdjęcie tej strefy, podmień plik
 - [ ] **Kwota depozytu** — treść mówi, że depozyt potwierdza termin, ale nie podaje kwoty
 - [ ] **Czasy trwania i trwałość** — wpisane wartości branżowe (2,5–3 h, 1–2 lata itd.),
       Milana powinna je potwierdzić
