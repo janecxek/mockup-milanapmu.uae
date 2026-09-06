@@ -103,20 +103,27 @@ zależności zewnętrznych, wgraj `lenis.min.js` do `assets/js/` i podmień `src
 
 ## Zdjęcia
 
-W `assets/img/` są placeholdery (miękkie gradienty w palecie marki, z dyskretną
-etykietą co ma być na danym kadrze). **Podmieniasz plik pod tą samą nazwą** —
-nic w kodzie nie wymaga zmiany. Zalecane: WebP, szerokość 1600 px dla kadrów
-sekcyjnych, 2400 px dla hero.
+Osiem kadrów scenicznych jest już wgranych jako WebP. Do uzupełnienia zostały
+tylko pary przed/po — nadal są placeholderami z widocznym podpisem „BEFORE / AFTER".
 
-| Plik | Kadr |
-|---|---|
-| `hero.svg` | zabieg w trakcie, kadr poziomy, dużo miejsca po prawej na tekst |
-| `service-brows/lips/camo.svg` | po jednym kadrze na usługę, 4:3 |
-| `ba-*-before/after.svg` | pary przed/po, ten sam kadr i to samo światło |
-| `portrait.svg` | Milana przy pracy, pion |
-| `home-service.svg` | rozłożone stanowisko u klientki |
-| `studio.svg` | sterylne, jednorazowe akcesoria |
-| `detail-pigments.svg` | próbki pigmentów przy skórze |
+| Plik | Status | Wymiary |
+|---|---|---|
+| `hero.webp` | gotowe | 1672×941 |
+| `service-brows.webp` · `service-lips.webp` · `service-camo.webp` | gotowe | 1400×788 |
+| `detail-pigments.webp` · `home-service.webp` · `studio.webp` | gotowe | 1400×933 |
+| `portrait.webp` | gotowe | 1024×1536 |
+| `ba-brows-*` · `ba-lips-*` · `ba-camo-*` | **placeholder** | 1200×900 |
+
+Pliki źródłowe PNG nie są trzymane w repo — w repozytorium są tylko skonwertowane
+WebP (17 MB → 529 KB). Konwersja: `tools/` nie ma do tego skryptu, robiona jednorazowo
+przez canvas w headless Chromium.
+
+Wymiary są wpisane w `DIMS` w `tools/build.py` i trafiają na `<img>` jako
+`width`/`height`, żeby przeglądarka rezerwowała miejsce zanim plik dojedzie.
+**Podmieniając zdjęcie na inne o innych proporcjach, zaktualizuj `DIMS`.**
+
+Pary przed/po wymagają szczególnej uwagi: obie połowy muszą mieć **identyczny kadr,
+odległość i światło**, inaczej suwak porównania rozjeżdża się i wygląda na oszustwo.
 
 ## Do potwierdzenia z klientką (placeholdery)
 

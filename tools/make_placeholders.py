@@ -64,20 +64,14 @@ BLUSH  = ("#E7C4BA", "#D3A196", "#A87A6E", "#F6DDD5", "#C08D80")  # lips
 GOLD   = ("#D8BE8B", "#B99A62", "#7A6238", "#F2E0B8", "#9C8047")  # gold-lit
 
 FILES = [
-    ("hero.svg",            1920, 1080, ("#B6A08C", "#8E7563", "#57493F", "#E3CDB4", "#7A6455"), "HERO — TREATMENT IN PROGRESS",  "Placeholder for the hero photograph"),
-    ("service-brows.svg",   1200,  900, SKIN,  "PHOTO — POWDER BROWS",          "Placeholder for a powder brows photograph"),
-    ("service-lips.svg",    1200,  900, BLUSH, "PHOTO — LIP BLUSH",             "Placeholder for a lip blush photograph"),
-    ("service-camo.svg",    1200,  900, WARM,  "PHOTO — SCAR CAMOUFLAGE",       "Placeholder for a scar camouflage photograph"),
-    ("portrait.svg",        1000, 1250, WARM,  "PHOTO — MILANA AT WORK",        "Placeholder for a portrait of Milana"),
-    ("home-service.svg",    1200,  900, GOLD,  "PHOTO — HOME SETUP",            "Placeholder for a home service setup photograph"),
-    ("studio.svg",          1200,  900, WARM,  "PHOTO — STERILE SETUP",         "Placeholder for a sterile equipment photograph"),
-    ("detail-pigments.svg", 1200,  900, SKIN,  "PHOTO — PIGMENT SWATCHES",      "Placeholder for a pigment swatch photograph"),
-    ("ba-brows-before.svg", 1200,  900, ("#D6B69B","#B99578","#8A6E59","#E8D0B9","#A88568"), "BEFORE — BROWS", "Placeholder: brows before"),
-    ("ba-brows-after.svg",  1200,  900, ("#EBD2BB","#D6B597","#A98A70","#F7E6D6","#C4A184"), "AFTER — BROWS",  "Placeholder: brows after"),
-    ("ba-lips-before.svg",  1200,  900, ("#D9B3AA","#BE8E85","#8E6961","#EDCFC7","#AC8078"), "BEFORE — LIPS",  "Placeholder: lips before"),
-    ("ba-lips-after.svg",   1200,  900, ("#EFC6BB","#DBA294","#B27E70","#FBE1D8","#C89283"), "AFTER — LIPS",   "Placeholder: lips after"),
-    ("ba-camo-before.svg",  1200,  900, ("#D7BDA6","#BC9C82","#8E735E","#EAD5BF","#A9866B"), "BEFORE — SCAR",  "Placeholder: scar before"),
-    ("ba-camo-after.svg",   1200,  900, ("#E9D2BB","#D2B295","#A48771","#F6E5D3","#C09C7F"), "AFTER — SCAR",   "Placeholder: scar after"),
+    # The eight scene photographs are real files now; only the before/after
+    # pairs are still placeholders, waiting for Milana's own case photos.
+    ("ba-brows-before.svg", 1200, 900, ("#D6B69B","#B99578","#8A6E59","#E8D0B9","#A88568"), "BEFORE — BROWS", "Placeholder: brows before"),
+    ("ba-brows-after.svg",  1200, 900, ("#EBD2BB","#D6B597","#A98A70","#F7E6D6","#C4A184"), "AFTER — BROWS",  "Placeholder: brows after"),
+    ("ba-lips-before.svg",  1200, 900, ("#D9B3AA","#BE8E85","#8E6961","#EDCFC7","#AC8078"), "BEFORE — LIPS",  "Placeholder: lips before"),
+    ("ba-lips-after.svg",   1200, 900, ("#EFC6BB","#DBA294","#B27E70","#FBE1D8","#C89283"), "AFTER — LIPS",   "Placeholder: lips after"),
+    ("ba-camo-before.svg",  1200, 900, ("#D7BDA6","#BC9C82","#8E735E","#EAD5BF","#A9866B"), "BEFORE — SCAR",  "Placeholder: scar before"),
+    ("ba-camo-after.svg",   1200, 900, ("#E9D2BB","#D2B295","#A48771","#F6E5D3","#C09C7F"), "AFTER — SCAR",   "Placeholder: scar after"),
 ]
 
 for name, w, h, c, label, alt in FILES:

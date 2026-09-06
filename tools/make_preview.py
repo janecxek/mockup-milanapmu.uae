@@ -29,10 +29,14 @@ fonts_css = re.sub(r"url\(\.\./fonts/([^)]+)\)", embed_font, fonts_css)
 
 css = "\n".join([read("assets/css/tokens.css"), fonts_css, read("assets/css/site.css")])
 
-# --- images: SVG placeholders as data URIs ----------------------------------
+# --- images as data URIs: real photographs and the remaining placeholders ---
+MIME = {".svg": "image/svg+xml", ".webp": "image/webp", ".png": "image/png", ".jpg": "image/jpeg"}
 images = {}
-for f in sorted((ROOT / "assets/img").glob("*.svg")):
-    images[f.name] = "data:image/svg+xml;base64," + base64.b64encode(f.read_bytes()).decode()
+for f in sorted((ROOT / "assets/img").iterdir()):
+    mime = MIME.get(f.suffix.lower())
+    if not mime:
+        continue
+    images[f.name] = f"data:{mime};base64," + base64.b64encode(f.read_bytes()).decode()
 
 # --- behaviour: make the IIFE re-runnable after each route change -----------
 js = read("assets/js/site.js")
@@ -64,11 +68,14 @@ for lang in ("en", "ru"):
 
         body = re.sub(r'href="((?:\.\./|ru/)?[a-z-]+\.html)(#[a-z-]+)?"', href, body)
         body = re.sub(r'href="#([a-z-]+)"(?! )', lambda m: 'href="%s"' % route(lang, page, m.group(1)), body)
-        body = re.sub(r'src="(?:\.\./)?assets/img/([^"]+)"', lambda m: 'src="%s"' % images[m.group(1)], body)
+        # Reference images by token; render() resolves them from a single map,
+        # so a picture used on six pages is still stored once.
+        body = re.sub(r'src="(?:\.\./)?assets/img/([^"]+)"', lambda m: 'src="#img/%s"' % m.group(1), body)
         bodies[route(lang, page).lstrip("#/")] = body
 
 import json
 router = """
+const IMAGES = %s;
 const PAGES = %s;
 const app = document.getElementById('app');
 function render() {
@@ -77,6 +84,10 @@ function render() {
   const body = PAGES[key] || PAGES['en/home'];
   document.documentElement.lang = key.startsWith('ru') ? 'ru' : 'en';
   app.innerHTML = body;
+  app.querySelectorAll('img[src^="#img/"]').forEach(function (img) {
+    const key = img.getAttribute('src').slice(5);
+    if (IMAGES[key]) img.src = IMAGES[key];
+  });
   window.__initSite();
   if (anchor) {
     const el = document.getElementById(anchor);
@@ -113,7 +124,8 @@ document.addEventListener('click', function (e) {
 }, true);
 
 render();
-""" % json.dumps(bodies, ensure_ascii=False).replace("</", "<\\/")
+""" % (json.dumps(images, ensure_ascii=False),
+         json.dumps(bodies, ensure_ascii=False).replace("</", "<\\/"))
 
 html = """<title>Milana PMU Dubai</title>
 <style>%s
